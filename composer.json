@@ -1,0 +1,21 @@
+{
+	"name": "yurunsoft/yurun-oauth-login",
+	"type": "project",
+    "autoload": {
+        "psr-4": {
+            "Yurun\\OAuthLogin\\": "src/"
+        }
+    },
+    "require": {
+		"yurunsoft/yurun-http" : "dev-master"
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}
