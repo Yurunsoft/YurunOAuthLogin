@@ -12,6 +12,48 @@ class Base
 	 */
 	public $http;
 
+	/**
+	 * 应用的唯一标识。
+	 * @var string
+	 */
+	public $appid;
+
+	/**
+	 * appid对应的密钥
+	 * @var string
+	 */
+	public $appSecret;
+
+	/**
+	 * 登录回调地址
+	 * @var string
+	 */
+	public $callbackUrl;
+
+	/**
+	 * state值，调用getAuthUrl方法后可以获取到
+	 * @var string
+	 */
+	public $state;
+
+	/**
+	 * 接口调用结果
+	 * @var array
+	 */
+	public $result;
+
+	/**
+	 * AccessToken，调用相应方法后可以获取到
+	 * @var string
+	 */
+	public $accessToken;
+
+	/**
+	 * open，调用相应方法后可以获取到
+	 * @var string
+	 */
+	public $openid;
+
 	public function __construct()
 	{
 		$this->http = new HttpRequest;

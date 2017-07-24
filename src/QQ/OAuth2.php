@@ -11,58 +11,16 @@ class OAuth2 extends Base
 	const API_DOMAIN = 'https://graph.qq.com/';
 
 	/**
-	 * 应用的唯一标识。在OAuth2.0认证过程中，appid的值即为oauth_consumer_key的值。
-	 * @var string
-	 */
-	public $appid;
-
-	/**
-	 * appid对应的密钥，访问用户资源时用来验证应用的合法性。在OAuth2.0认证过程中，appkey的值即为oauth_consumer_secret的值。
-	 * @var string
-	 */
-	public $appkey;
-
-	/**
-	 * 登录回调地址
-	 * @var string
-	 */
-	public $callbackUrl;
-
-	/**
-	 * state值，调用getAuthUrl方法后可以获取到
-	 * @var string
-	 */
-	public $state;
-
-	/**
-	 * 接口调用结果
-	 * @var array
-	 */
-	public $result;
-
-	/**
-	 * AccessToken，调用getAccessToken方法后可以获取到
-	 * @var string
-	 */
-	public $accessToken;
-
-	/**
-	 * open，调用getOpenID方法后可以获取到
-	 * @var string
-	 */
-	public $openid;
-
-	/**
 	 * 构造方法
 	 * @param string $appid 应用的唯一标识。在OAuth2.0认证过程中，appid的值即为oauth_consumer_key的值。
-	 * @param string $appkey appid对应的密钥，访问用户资源时用来验证应用的合法性。在OAuth2.0认证过程中，appkey的值即为oauth_consumer_secret的值。
+	 * @param string $appSecret appid对应的密钥，访问用户资源时用来验证应用的合法性。在OAuth2.0认证过程中，appSecret的值即为oauth_consumer_secret的值。
 	 * @param string $callbackUrl 登录回调地址
 	 */
-	public function __construct($appid, $appkey, $callbackUrl)
+	public function __construct($appid, $appSecret, $callbackUrl)
 	{
 		parent::__construct();
 		$this->appid = $appid;
-		$this->appkey = $appkey;
+		$this->appSecret = $appSecret;
 		$this->callbackUrl = $callbackUrl;
 	}
 
@@ -156,7 +114,7 @@ class OAuth2 extends Base
 		parse_str($this->http->get($this->getUrl('oauth2.0/token', array(
 			'grant_type'	=>	'authorization_code',
 			'client_id'		=>	$this->appid,
-			'client_secret'	=>	$this->appkey,
+			'client_secret'	=>	$this->appSecret,
 			'code'			=>	isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
 			'state'			=>	$state,
 			'redirect_uri'	=>	isset($redirectUri) ? $redirectUri : $this->callbackUrl,
@@ -225,7 +183,7 @@ class OAuth2 extends Base
 		$this->result = $this->jsonp_decode($this->http->get($this->getUrl('oauth2.0/token', array(
 			'grant_type'	=>	'refresh_token',
 			'client_id'		=>	$this->appid,
-			'client_secret'	=>	$this->appkey,
+			'client_secret'	=>	$this->appSecret,
 			'refresh_token'	=>	$refreshToken,
 		)))->body, true);
 		return isset($this->result['code']) && 0 == $this->result['code'];

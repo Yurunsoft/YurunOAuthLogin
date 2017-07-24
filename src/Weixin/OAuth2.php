@@ -16,42 +16,6 @@ class OAuth2 extends Base
 	const OPEN_DOMAIN = 'https://open.weixin.qq.com/';
 
 	/**
-	 * AppID
-	 * @var string
-	 */
-	public $appid;
-
-	/**
-	 * AppSecret
-	 * @var string
-	 */
-	public $appSecret;
-
-	/**
-	 * state值，调用getAuthUrl方法后可以获取到
-	 * @var string
-	 */
-	public $state;
-
-	/**
-	 * 接口调用结果
-	 * @var array
-	 */
-	public $result;
-
-	/**
-	 * AccessToken，调用getAccessToken方法后可以获取到
-	 * @var string
-	 */
-	public $accessToken;
-
-	/**
-	 * open，调用getOpenID方法后可以获取到
-	 * @var string
-	 */
-	public $openid;
-
-	/**
 	 * 构造方法
 	 * @param string $appid AppID
 	 * @param string $appSecret AppSecret
