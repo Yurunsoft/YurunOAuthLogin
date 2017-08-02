@@ -163,9 +163,9 @@ class OAuth2 extends Base
 			'oauth_consumer_key'	=>	$this->appid,
 			'openid'				=>	null === $openid ? $this->openid : $openid,
 		)))->body, true);
-		if(isset($this->result['code']) && 0 != $this->result['code'])
+		if(isset($this->result['ret']) && 0 != $this->result['ret'])
 		{
-			throw new ApiException($this->result['msg'], $this->result['code']);
+			throw new ApiException($this->result['msg'], $this->result['ret']);
 		}
 		else
 		{
