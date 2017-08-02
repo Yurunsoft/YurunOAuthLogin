@@ -2,6 +2,7 @@
 namespace Yurun\OAuthLogin\Weixin;
 
 use Yurun\OAuthLogin\Base;
+use Yurun\OAuthLogin\ApiException;
 
 class OAuth2 extends Base
 {

@@ -2,7 +2,6 @@
 namespace Yurun\OAuthLogin;
 
 use Yurun\Until\HttpRequest;
-use Yurun\OAuthLogin\ApiException;
 
 class Base
 {
