@@ -134,13 +134,15 @@ class OAuth2 extends Base
 	 * 获取用户个人信息（UnionID机制）
 	 * @param string $accessToken 不传则使用parseCallback方法调用后的值
 	 * @param string $openid 普通用户标识，对该公众帐号唯一，不传则使用parseCallback方法调用后的值
+	 * @param string $lang 返回国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语
 	 * @return void
 	 */
-	public function getUserInfo($accessToken = null, $openid = null)
+	public function getUserInfo($accessToken = null, $openid = null, $lang = 'zh_CN')
 	{
 		$this->result = json_decode($this->http->get($this->getUrl('sns/userinfo', array(
 			'access_token'	=>	null === $accessToken ? $this->accessToken : $accessToken,
 			'openid'		=>	null === $openid ? $this->openid : $openid,
+			'lang'			=>	$lang,
 		)))->body, true);
 		if(isset($this->result['errcode']) && 0 != $this->result['errcode'])
 		{
