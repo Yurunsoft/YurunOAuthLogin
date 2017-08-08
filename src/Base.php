@@ -3,7 +3,7 @@ namespace Yurun\OAuthLogin;
 
 use Yurun\Until\HttpRequest;
 
-class Base
+abstract class Base
 {
 	/**
 	 * http请求类
@@ -36,6 +36,12 @@ class Base
 	public $state;
 
 	/**
+	 * 授权权限列表
+	 * @var array
+	 */
+	public $scope;
+
+	/**
 	 * 接口调用结果
 	 * @var array
 	 */
@@ -53,8 +59,17 @@ class Base
 	 */
 	public $openid;
 
-	public function __construct()
+	/**
+	  * 构造方法
+	 * @param string $appid 应用的唯一标识
+	 * @param string $appSecret appid对应的密钥
+	 * @param string $callbackUrl 登录回调地址
+	 */
+	public function __construct($appid, $appSecret, $callbackUrl)
 	{
+		$this->appid = $appid;
+		$this->appSecret = $appSecret;
+		$this->callbackUrl = $callbackUrl;
 		$this->http = new HttpRequest;
 	}
 
@@ -80,4 +95,102 @@ class Base
 		}
 		return json_decode($jsonp, $assoc);
 	}
+
+	/**
+	 * 获取state值
+	 * @param string $state
+	 * @return string
+	 */
+	protected function getState($state = null)
+	{
+		if(null === $state)
+		{
+			if(null === $this->state)
+			{
+				$this->state = md5(\uniqid('', true));
+			}
+		}
+		else
+		{
+			$this->state = $state;
+		}
+		return $this->state;
+	}
+
+	/**
+	 * 检测state是否相等
+	 * @param string $storeState
+	 * @param string $state
+	 * @return bool
+	 */
+	public function checkState($storeState, $state = null)
+	{
+		if(null === $state)
+		{
+			if(null === $this->state)
+			{
+				if(isset($_GET['state']))
+				{
+					$state = $_GET['state'];
+				}
+				else
+				{
+					$state = '';
+				}
+			}
+			else
+			{
+				$state = $this->state;
+			}
+		}
+		return $storeState === $state;
+	}
+
+	/**
+	 * 第一步:获取登录页面跳转url
+	 * @param string $callbackUrl 登录回调地址
+	 * @param string $state 状态值，不传则自动生成，随后可以通过->state获取。用于第三方应用防止CSRF攻击，成功授权后回调时会原样带回。一般为每个用户登录时随机生成state存在session中，登录回调中判断state是否和session中相同
+	 * @param array $scope 请求用户授权时向用户显示的可进行授权的列表。可空
+	 * @return string
+	 */
+	public abstract function getAuthUrl($redirectUri = null, $state = null, $scope = null);
+
+	/**
+	 * 第二步:处理回调并获取access_token。与getAccessToken不同的是会验证state值是否匹配，防止csrf攻击。
+	 * @param [type] $storeState 存储的正确的state
+	 * @param [type] $code 第一步里$redirectUri地址中传过来的code，为null则通过get参数获取
+	 * @param [type] $state 回调接收到的state，为null则通过get参数获取
+	 * @return string
+	 */
+	public function getAccessToken($storeState, $code = null, $state = null)
+	{
+		if(!$this->checkState($storeState, $code))
+		{
+			throw new \InvalidArgumentException('state验证失败');
+		}
+		return $this->__getAccessToken($storeState, $code, $state);
+	}
+
+	/**
+	 * 第二步:处理回调并获取access_token。与getAccessToken不同的是会验证state值是否匹配，防止csrf攻击。
+	 * @param [type] $storeState 存储的正确的state
+	 * @param [type] $code 第一步里$redirectUri地址中传过来的code，为null则通过get参数获取
+	 * @param [type] $state 回调接收到的state，为null则通过get参数获取
+	 * @return string
+	 */
+	protected abstract function __getAccessToken($storeState, $code = null, $state = null);
+
+	/**
+	 * 获取用户资料
+	 * @param string $accessToken
+	 * @return array
+	 */
+	public abstract function getUserInfo($accessToken = null);
+	
+	/**
+	 * 刷新AccessToken续期
+	 * @param string $refreshToken
+	 * @return bool
+	 */
+	public abstract function refreshToken($refreshToken);
 }
