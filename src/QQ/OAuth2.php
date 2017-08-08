@@ -118,6 +118,24 @@ class OAuth2 extends Base
 	}
 
 	/**
+	 * 检验授权凭证AccessToken是否有效
+	 * @param string $accessToken
+	 * @return bool
+	 */
+	public function validateAccessToken($accessToken = null)
+	{
+		try
+		{
+			$this->getOpenID($accessToken);
+			return true;
+		}
+		catch(ApiException $e)
+		{
+			return false;
+		}
+	}
+
+	/**
 	 * 获取OpenID
 	 * @param string $accessToken
 	 * @return string
@@ -136,4 +154,5 @@ class OAuth2 extends Base
 			return $this->openid = $this->result['openid'];
 		}
 	}
+
 }

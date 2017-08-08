@@ -193,4 +193,11 @@ abstract class Base
 	 * @return bool
 	 */
 	public abstract function refreshToken($refreshToken);
+
+	/**
+	 * 检验授权凭证AccessToken是否有效
+	 * @param string $accessToken
+	 * @return bool
+	 */
+	public abstract function validateAccessToken($accessToken = null);
 }
