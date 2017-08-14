@@ -1,6 +1,7 @@
 {
 	"name": "yurunsoft/yurun-oauth-login",
-	"type": "project",
+	"type": "library",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Yurun\\OAuthLogin\\": "src/"
