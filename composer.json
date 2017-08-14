@@ -8,15 +8,6 @@
         }
     },
     "require": {
-		"yurunsoft/yurun-http" : "dev-master"
-    },
-    "config": {
-        "preferred-install": "dist"
-    },
-    "repositories": {
-        "packagist": {
-            "type": "composer",
-            "url": "https://packagist.phpcomposer.com"
-        }
+		"yurunsoft/yurun-http" : "1.3.*"
     }
 }
