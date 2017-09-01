@@ -164,7 +164,7 @@ abstract class Base
 	 */
 	public function getAccessToken($storeState, $code = null, $state = null)
 	{
-		if(!$this->checkState($storeState, $code))
+		if(!$this->checkState($storeState, $state))
 		{
 			throw new \InvalidArgumentException('state验证失败');
 		}

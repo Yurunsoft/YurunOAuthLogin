@@ -18,6 +18,18 @@ class OAuth2 extends Base
 	public $display;
 
 	/**
+	 * openid从哪个字段取，默认为openid
+	 * @var int
+	 */
+	public $openidMode = OpenidMode::OPEN_ID;
+
+	/**
+	 * 是否使用unionid，默认为false
+	 * @var boolean
+	 */
+	public $isUseUnionID = false;
+
+	/**
 	 * 获取url地址
 	 * @param string $name 跟在域名后的文本
 	 * @param array $params GET参数
@@ -142,16 +154,29 @@ class OAuth2 extends Base
 	 */
 	public function getOpenID($accessToken = null)
 	{
-		$this->result = $this->jsonp_decode($this->http->get($this->getUrl('oauth2.0/me', array(
+		$params = array(
 			'access_token'	=>	null === $accessToken ? $this->accessToken : $accessToken,
-		)))->body, true);
+		);
+		if($this->isUseUnionID && OpenidMode::UNION_ID === $this->openidMode)
+		{
+			$params['unionid'] = $this->openidMode;
+		}
+		$this->result = $this->jsonp_decode($this->http->get($this->getUrl('oauth2.0/me', $params))->body, true);
 		if(isset($this->result['code']) && 0 != $this->result['code'])
 		{
 			throw new ApiException($this->result['msg'], $this->result['code']);
 		}
 		else
 		{
-			return $this->openid = $this->result['openid'];
+			$this->openid = $this->result['openid'];
+			if($this->isUseUnionID && OpenidMode::UNION_ID === $this->openidMode)
+			{
+				return $this->result['unionid'];
+			}
+			else 
+			{
+				return $this->openid;
+			}
 		}
 	}
 
