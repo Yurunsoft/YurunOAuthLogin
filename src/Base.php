@@ -7,7 +7,7 @@ abstract class Base
 {
 	/**
 	 * http请求类
-	 * @var HttpRequest
+	 * @var Yurun\Until\HttpRequest
 	 */
 	public $http;
 
@@ -54,13 +54,13 @@ abstract class Base
 	public $accessToken;
 
 	/**
-	 * open，调用相应方法后可以获取到
+	 * openid，调用相应方法后可以获取到
 	 * @var string
 	 */
 	public $openid;
 
 	/**
-	  * 构造方法
+	 * 构造方法
 	 * @param string $appid 应用的唯一标识
 	 * @param string $appSecret appid对应的密钥
 	 * @param string $callbackUrl 登录回调地址
@@ -75,8 +75,8 @@ abstract class Base
 
 	/**
 	 * 把jsonp转为php数组
-	 * @param string $jsonp
-	 * @param boolean $assoc
+	 * @param string $jsonp jsonp字符串
+	 * @param boolean $assoc 当该参数为true时，将返回array而非object
 	 * @return array
 	 */
 	public function jsonp_decode($jsonp, $assoc = false)
@@ -119,8 +119,8 @@ abstract class Base
 
 	/**
 	 * 检测state是否相等
-	 * @param string $storeState
-	 * @param string $state
+	 * @param string $storeState 本地存储的正确的state
+	 * @param string $state 回调传递过来的state
 	 * @return bool
 	 */
 	public function checkState($storeState, $state = null)
@@ -157,9 +157,9 @@ abstract class Base
 
 	/**
 	 * 第二步:处理回调并获取access_token。与getAccessToken不同的是会验证state值是否匹配，防止csrf攻击。
-	 * @param [type] $storeState 存储的正确的state
-	 * @param [type] $code 第一步里$redirectUri地址中传过来的code，为null则通过get参数获取
-	 * @param [type] $state 回调接收到的state，为null则通过get参数获取
+	 * @param string $storeState 存储的正确的state
+	 * @param string $code 第一步里$redirectUri地址中传过来的code，为null则通过get参数获取
+	 * @param string $state 回调接收到的state，为null则通过get参数获取
 	 * @return string
 	 */
 	public function getAccessToken($storeState, $code = null, $state = null)
@@ -173,9 +173,9 @@ abstract class Base
 
 	/**
 	 * 第二步:处理回调并获取access_token。与getAccessToken不同的是会验证state值是否匹配，防止csrf攻击。
-	 * @param [type] $storeState 存储的正确的state
-	 * @param [type] $code 第一步里$redirectUri地址中传过来的code，为null则通过get参数获取
-	 * @param [type] $state 回调接收到的state，为null则通过get参数获取
+	 * @param string $storeState 存储的正确的state
+	 * @param string $code 第一步里$redirectUri地址中传过来的code，为null则通过get参数获取
+	 * @param string $state 回调接收到的state，为null则通过get参数获取
 	 * @return string
 	 */
 	protected abstract function __getAccessToken($storeState, $code = null, $state = null);

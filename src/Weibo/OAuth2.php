@@ -68,9 +68,9 @@ class OAuth2 extends Base
 
 	/**
 	 * 第二步:处理回调并获取access_token。与getAccessToken不同的是会验证state值是否匹配，防止csrf攻击。
-	 * @param [type] $storeState 存储的正确的state
-	 * @param [type] $code 第一步里$redirectUri地址中传过来的code，为null则通过get参数获取
-	 * @param [type] $state 回调接收到的state，为null则通过get参数获取
+	 * @param string $storeState 存储的正确的state
+	 * @param string $code 第一步里$redirectUri地址中传过来的code，为null则通过get参数获取
+	 * @param string $state 回调接收到的state，为null则通过get参数获取
 	 * @return string
 	 */
 	protected function __getAccessToken($storeState, $code = null, $state = null)
