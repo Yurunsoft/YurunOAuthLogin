@@ -17,7 +17,7 @@ class OAuth2 extends Base
 	const API_DOMAIN = 'https://api.github.com/';
 
 	/**
-	 * 是否在登录页显示注册
+	 * 是否在登录页显示注册，默认false
 	 * @var bool
 	 */
 	public $allowSignup = false;
