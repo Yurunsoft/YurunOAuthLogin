@@ -1,6 +1,20 @@
 # YurunOAuthLogin
 PHP封装集成的QQ、微信登录SDK，测试代码可看test目录
 
+## [在线文档](http://doc.yurunsoft.com/YurunOAuthLogin "在线文档")
+
+## 安装
+
+在您的composer.json中加入配置：
+
+```json
+{
+    "require": {
+        "yurunsoft/yurun-oauth-login": "1.*"
+    }
+}
+```
+
 ## 代码实例
 
 自v1.2起所有方法统一参数调用，如果需要额外参数的可使用对象属性赋值，具体参考test目录下的测试代码。
