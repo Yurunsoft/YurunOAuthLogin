@@ -1,5 +1,15 @@
 # YurunOAuthLogin
-YurunOAuthLogin是一个使用PHP开发的PHP封装集成的登录SDK，测试代码可看test目录。
+
+YurunOAuthLogin是一个使用PHP开发集成登录SDK，测试代码可看test目录。
+
+## 支持的登录平台
+
+- QQ
+- 微信
+- 微博
+- Github
+
+> 后续将不断添加新的平台支持，也欢迎你来提交PR，一起完善！
 
 ## [在线文档](http://doc.yurunsoft.com/YurunOAuthLogin "在线文档")
 
