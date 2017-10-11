@@ -1,5 +1,5 @@
 # YurunOAuthLogin
-PHP封装集成的QQ、微信登录SDK，测试代码可看test目录
+YurunOAuthLogin是一个使用PHP开发的PHP封装集成的登录SDK，测试代码可看test目录。
 
 ## [在线文档](http://doc.yurunsoft.com/YurunOAuthLogin "在线文档")
 
