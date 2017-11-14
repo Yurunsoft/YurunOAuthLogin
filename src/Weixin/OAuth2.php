@@ -44,7 +44,7 @@ class OAuth2 extends Base
 		{
 			$domain = static::API_DOMAIN . $name;
 		}
-		return $domain . (empty($params) ? '' : ('?' . \http_build_query($params)));
+		return $domain . (empty($params) ? '' : ('?' . $this->http_build_query($params)));
 	}
 
 	

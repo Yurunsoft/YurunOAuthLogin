@@ -97,6 +97,19 @@ abstract class Base
 	}
 
 	/**
+	 * http_build_query — 生成 URL-encode 之后的请求字符串
+	 * @param array $query_data
+	 * @param string $numeric_prefix
+	 * @param string $arg_separator
+	 * @param int $enc_type
+	 * @return void
+	 */
+	public function http_build_query($query_data, $numeric_prefix = '', $arg_separator = '&', $enc_type = PHP_QUERY_RFC1738)
+	{
+		return \http_build_query($query_data, $numeric_prefix, $arg_separator, $enc_type);
+	}
+
+	/**
 	 * 获取state值
 	 * @param string $state
 	 * @return string

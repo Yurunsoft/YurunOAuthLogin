@@ -37,7 +37,7 @@ class OAuth2 extends Base
 	 */
 	public function getUrl($name, $params = array())
 	{
-		return static::API_DOMAIN . $name . (empty($params) ? '' : ('?' . \http_build_query($params)));
+		return static::API_DOMAIN . $name . (empty($params) ? '' : ('?' . $this->http_build_query($params)));
 	}
 
 	/**
