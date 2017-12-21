@@ -6,6 +6,8 @@ use Yurun\OAuthLogin\ApiException;
 
 class OAuth2 extends Base
 {
+	use \Yurun\OAuthLogin\Traits\LoginAgent;
+
 	/**
 	 * api接口域名
 	 */
@@ -49,14 +51,22 @@ class OAuth2 extends Base
 	 */
 	public function getAuthUrl($callbackUrl = null, $state = null, $scope = null)
 	{
-		return $this->getUrl('oauth2.0/authorize', array(
+		$option = array(
 			'response_type'		=>	'code',
 			'client_id'			=>	$this->appid,
 			'redirect_uri'		=>	null === $callbackUrl ? $this->callbackUrl : $callbackUrl,
 			'state'				=>	$this->getState($state),
 			'scope'				=>	null === $scope ? $this->scope : $scope,
 			'display'			=>	$this->display,
-		));
+		);
+		if(null === $this->loginAgentUrl)
+		{
+			return $this->getUrl('oauth2.0/authorize', $option);
+		}
+		else
+		{
+			return $this->loginAgentUrl . '?' . $this->http_build_query($option);
+		}
 	}
 
 	/**

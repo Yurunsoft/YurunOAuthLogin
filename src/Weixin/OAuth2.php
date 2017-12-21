@@ -6,6 +6,8 @@ use Yurun\OAuthLogin\ApiException;
 
 class OAuth2 extends Base
 {
+	use \Yurun\OAuthLogin\Traits\LoginAgent;
+
 	/**
 	 * api接口域名
 	 */
@@ -47,7 +49,6 @@ class OAuth2 extends Base
 		return $domain . (empty($params) ? '' : ('?' . $this->http_build_query($params)));
 	}
 
-	
 	/**
 	 * 第一步:获取PC页登录所需的url，一般用于生成二维码
 	 * @param string $callbackUrl 登录回调地址
@@ -57,13 +58,21 @@ class OAuth2 extends Base
 	 */
 	public function getAuthUrl($callbackUrl = null, $state = null, $scope = null)
 	{
-		return $this->getUrl(static::OPEN_DOMAIN . 'connect/qrconnect', array(
+		$option = array(
 			'appid'				=>	$this->appid,
 			'redirect_uri'		=>	null === $callbackUrl ? (null === $this->callbackUrl ? (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') : $this->callbackUrl) : $callbackUrl,
 			'response_type'		=>	'code',
 			'scope'				=>	null === $scope ? (null === $this->scope ? 'snsapi_login' : $this->scope) : null,
 			'state'				=>	$this->getState($state),
-		)) . '#wechat_redirect';
+		);
+		if(null === $this->loginAgentUrl)
+		{
+			return $this->getUrl(static::OPEN_DOMAIN . 'connect/qrconnect', $option) . '#wechat_redirect';
+		}
+		else
+		{
+			return $this->loginAgentUrl . '?' . $this->http_build_query($option);
+		}
 	}
 
 	/**
@@ -75,13 +84,22 @@ class OAuth2 extends Base
 	 */
 	public function getWeixinAuthUrl($callbackUrl = null, $state = null, $scope = null)
 	{
-		return $this->getUrl(static::OPEN_DOMAIN . 'connect/oauth2/authorize', array(
+		$option = array(
 			'appid'				=>	$this->appid,
 			'redirect_uri'		=>	null === $callbackUrl ? (null === $this->callbackUrl ? (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') : $this->callbackUrl) : $callbackUrl,
 			'response_type'		=>	'code',
 			'scope'				=>	null === $scope ? (null === $this->scope ? 'snsapi_userinfo' : $this->scope) : null,
 			'state'				=>	$this->getState($state),
-		)) . '#wechat_redirect';
+		);
+		if(null === $this->loginAgentUrl)
+		{
+			return $this->getUrl(static::OPEN_DOMAIN . 'connect/oauth2/authorize', $option) . '#wechat_redirect';
+		}
+		else
+		{
+			$option['isMp'] = 1;
+			return $this->loginAgentUrl . '?' . $this->http_build_query($option);
+		}
 	}
 
 	/**

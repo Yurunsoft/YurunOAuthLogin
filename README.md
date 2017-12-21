@@ -65,3 +65,18 @@ $userInfo = $qqOAuth->getUserInfo();
 // 用户唯一标识
 $openid = $qqOAuth->openid;
 ```
+
+### 解决QQ、微信登录只能设置一个回调域名的问题
+
+```php
+// 解决只能设置一个回调域名的问题，下面地址需要改成你项目中的地址，可以参考test/QQ/loginAgent.php写法
+$qqOAuth->loginAgentUrl = 'http://localhost/test/QQ/loginAgent.php';
+
+$url = $qqOAuth->getAuthUrl();
+$_SESSION['YURUN_QQ_STATE'] = $qqOAuth->state;
+header('location:' . $url);
+```
+
+## 特别鸣谢
+
+* [GetWeixinCode](https://github.com/HADB/GetWeixinCode "GetWeixinCode")
