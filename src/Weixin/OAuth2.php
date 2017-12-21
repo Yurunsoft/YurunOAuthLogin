@@ -49,10 +49,10 @@ class OAuth2 extends Base
 
 	
 	/**
-	 * 第一步:获取登录页面跳转url
+	 * 第一步:获取PC页登录所需的url，一般用于生成二维码
 	 * @param string $callbackUrl 登录回调地址
 	 * @param string $state 状态值，不传则自动生成，随后可以通过->state获取。用于第三方应用防止CSRF攻击，成功授权后回调时会原样带回。一般为每个用户登录时随机生成state存在session中，登录回调中判断state是否和session中相同
-	 * @param array $scope 请求用户授权时向用户显示的可进行授权的列表。可空
+	 * @param array $scope 请求用户授权时向用户显示的可进行授权的列表。可空，默认snsapi_login
 	 * @return string
 	 */
 	public function getAuthUrl($callbackUrl = null, $state = null, $scope = null)
@@ -64,6 +64,24 @@ class OAuth2 extends Base
 			'scope'				=>	null === $scope ? (null === $this->scope ? 'snsapi_login' : $this->scope) : null,
 			'state'				=>	$this->getState($state),
 		));
+	}
+
+	/**
+	 * 第一步:获取在微信中登录授权的url
+	 * @param string $callbackUrl 登录回调地址
+	 * @param string $state 状态值，不传则自动生成，随后可以通过->state获取。用于第三方应用防止CSRF攻击，成功授权后回调时会原样带回。一般为每个用户登录时随机生成state存在session中，登录回调中判断state是否和session中相同
+	 * @param array $scope 请求用户授权时向用户显示的可进行授权的列表。可空，默认snsapi_userinfo
+	 * @return string
+	 */
+	public function getWeixinAuthUrl($callbackUrl = null, $state = null, $scope = null)
+	{
+		return $this->getUrl(static::OPEN_DOMAIN . 'connect/oauth2/authorize', array(
+			'appid'				=>	$this->appid,
+			'redirect_uri'		=>	null === $callbackUrl ? (null === $this->callbackUrl ? (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') : $this->callbackUrl) : $callbackUrl,
+			'response_type'		=>	'code',
+			'scope'				=>	null === $scope ? (null === $this->scope ? 'snsapi_userinfo' : $this->scope) : null,
+			'state'				=>	$this->getState($state),
+		)) . '#wechat_redirect';
 	}
 
 	/**
@@ -153,4 +171,56 @@ class OAuth2 extends Base
 		)))->body, true);
 		return isset($this->result['errcode']) && 0 == $this->result['errcode'];
 	}
+
+	/**
+	 * 获取微信JSSDK所需参数
+	 * @param string $jsapiTicket
+	 * @param string $url
+	 * @param string $nonceStr
+	 * @param string $timestamp
+	 * @return array
+	 */
+	public function getJSSDKParams($jsapiTicket, $url = null, $nonceStr = null, $timestamp = null)
+	{
+		if(null === $nonceStr)
+		{
+			$nonceStr = md5(uniqid('',true));
+		}
+
+		if(null === $timestamp)
+		{
+			$timestamp = time();
+		}
+
+		if(null === $url)
+		{
+			$url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+		}
+
+		$data = array(
+			'jsapi_ticket'	=>	$jsapiTicket,
+			'noncestr'		=>	$nonceStr,
+			'timestamp'		=>	$timestamp,
+			'url'			=>	$url,
+		);
+
+		$string = '';
+		foreach ($data as $k => $v)
+		{
+			if($v !== '' && $v !== null)
+			{
+				$string .= $k . '=' . $v . '&';
+			}
+		}
+
+		$signature = sha1(trim($content, '&'));
+
+		return array(
+			'appId'     => $this->appid,
+			'nonceStr'  => $nonceStr,
+			'timestamp' => $timestamp,
+			'signature' => $signature,
+		);
+	}
+
 }
