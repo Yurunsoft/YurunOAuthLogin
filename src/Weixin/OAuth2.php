@@ -63,7 +63,7 @@ class OAuth2 extends Base
 			'response_type'		=>	'code',
 			'scope'				=>	null === $scope ? (null === $this->scope ? 'snsapi_login' : $this->scope) : null,
 			'state'				=>	$this->getState($state),
-		));
+		)) . '#wechat_redirect';
 	}
 
 	/**
