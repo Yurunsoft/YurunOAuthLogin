@@ -1,6 +1,12 @@
 # YurunOAuthLogin
 
-YurunOAuthLogin是一个使用PHP开发集成登录SDK，测试代码可看test目录。
+YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、微博、Github。可以轻松嵌入支持 PHP >= 5.4 的任何系统中。
+
+我们有完善的在线技术文档：[http://doc.yurunsoft.com/YurunOAuthLogin](http://doc.yurunsoft.com/YurunOAuthLogin)
+
+同时欢迎各位加入技术支持群：74401592 [![点击加群](https://pub.idqqimg.com/wpa/images/group.png "点击加群")](https://shang.qq.com/wpa/qunwpa?idkey=e2e6b49e9a648aae5285b3aba155d59107bb66fde02e229e078bd7359cac8ac3)，如有问题可以及时解答和修复。
+
+大家在开发中肯定会对接各种各样的第三方平台，我个人精力有限，欢迎各位来提交 PR （[码云](https://gitee.com/yurunsoft/YurunOAuthLogin)/[Github](https://github.com/Yurunsoft/YurunOAuthLogin)），一起完善它，让它能够支持更多的平台，更加好用。
 
 ## 支持的登录平台
 
@@ -10,8 +16,6 @@ YurunOAuthLogin是一个使用PHP开发集成登录SDK，测试代码可看test�
 - Github
 
 > 后续将不断添加新的平台支持，也欢迎你来提交PR，一起完善！
-
-## [在线文档](http://doc.yurunsoft.com/YurunOAuthLogin "在线文档")
 
 ## 安装
 
@@ -66,7 +70,7 @@ $userInfo = $qqOAuth->getUserInfo();
 $openid = $qqOAuth->openid;
 ```
 
-### 解决QQ、微信登录只能设置一个回调域名的问题
+### 解决第三方登录只能设置一个回调域名的问题
 
 ```php
 // 解决只能设置一个回调域名的问题，下面地址需要改成你项目中的地址，可以参考test/QQ/loginAgent.php写法
