@@ -6,8 +6,6 @@ use Yurun\OAuthLogin\ApiException;
 
 class OAuth2 extends Base
 {
-	use \Yurun\OAuthLogin\Traits\LoginAgent;
-
 	/**
 	 * api接口域名
 	 */

@@ -2,6 +2,9 @@
 require __DIR__ . '/common.php';
 $githubOAuth = new \Yurun\OAuthLogin\Github\OAuth2($GLOBALS['oauth_github']['appid'], $GLOBALS['oauth_github']['appkey'], $GLOBALS['oauth_github']['callbackUrl']);
 
+// 解决只能设置一个回调域名的问题，下面地址需要改成你项目中的地址，可以参考./loginAgent.php写法
+// $githubOAuth->loginAgentUrl = 'http://localhost/test/Github/loginAgent.php';
+
 // 可选属性
 /*
 // 是否在登录页显示注册

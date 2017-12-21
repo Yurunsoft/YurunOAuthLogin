@@ -55,7 +55,7 @@ class OAuth2 extends Base
 	 */
 	public function getAuthUrl($callbackUrl = null, $state = null, $scope = null)
 	{
-		return $this->getUrl('oauth2/authorize', array(
+		$option = array(
 			'client_id'			=>	$this->appid,
 			'redirect_uri'		=>	null === $callbackUrl ? $this->callbackUrl : $callbackUrl,
 			'scope'				=>	$scope,
@@ -63,7 +63,15 @@ class OAuth2 extends Base
 			'display'			=>	$this->display,
 			'forcelogin'		=>	$this->forcelogin,
 			'language'			=>	$this->language,
-		));
+		);
+		if(null === $this->loginAgentUrl)
+		{
+			return $this->getUrl('oauth2/authorize', $option);
+		}
+		else
+		{
+			return $this->loginAgentUrl . '?' . $this->http_build_query($option);
+		}
 	}
 
 	/**

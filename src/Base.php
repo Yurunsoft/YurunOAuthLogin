@@ -60,6 +60,12 @@ abstract class Base
 	public $openid;
 
 	/**
+	 * 登录代理地址，用于解决只能设置一个回调域名/地址的问题
+	 * @var string
+	 */
+	public $loginAgentUrl;
+	
+	/**
 	 * 构造方法
 	 * @param string $appid 应用的唯一标识
 	 * @param string $appSecret appid对应的密钥
@@ -213,4 +219,14 @@ abstract class Base
 	 * @return bool
 	 */
 	public abstract function validateAccessToken($accessToken = null);
+
+	/**
+	 * 输出登录代理页内容，用于解决只能设置一个回调域名/地址的问题
+	 * @return void
+	 */
+	public function displayLoginAgent()
+	{
+		$ref = new \ReflectionClass(get_called_class());  
+		echo file_get_contents(dirname($ref->getFileName()) . '/loginAgent.html');
+	}
 }
