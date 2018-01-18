@@ -229,4 +229,13 @@ abstract class Base
 		$ref = new \ReflectionClass(get_called_class());  
 		echo file_get_contents(dirname($ref->getFileName()) . '/loginAgent.html');
 	}
+
+	/**
+	 * 获取回调地址
+	 * @return string
+	 */
+	public function getRedirectUri()
+	{
+		return null === $this->loginAgentUrl ? $this->callbackUrl : ($this->loginAgentUrl . '?' . http_build_query(array('redirect_uri'=>$this->callbackUrl)));
+	}
 }

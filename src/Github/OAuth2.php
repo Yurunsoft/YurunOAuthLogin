@@ -83,7 +83,7 @@ class OAuth2 extends Base
 			'client_id'			=>	$this->appid,
 			'client_secret'		=>	$this->appSecret,
 			'code'				=>	isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
-			'redirect_uri'		=>	$this->callbackUrl,
+			'redirect_uri'		=>	$this->getRedirectUri(),
 			'state'				=>	isset($state) ? $state : (isset($_GET['state']) ? $_GET['state'] : ''),
 		)))->body, true);
 		if(isset($this->result['error']))

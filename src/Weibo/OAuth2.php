@@ -88,7 +88,7 @@ class OAuth2 extends Base
 			'client_secret'	=>	$this->appSecret,
 			'grant_type'	=>	'authorization_code',
 			'code'			=>	isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
-			'redirect_uri'	=>	$this->callbackUrl,
+			'redirect_uri'	=>	$this->getRedirectUri(),
 		))->body, true);
 		if(isset($this->result['error_code']))
 		{
