@@ -22,6 +22,35 @@ class OAuth2 extends Base
 		return static::API_DOMAIN . $name . (empty($params) ? '' : ('?' . $this->http_build_query($params)));
 	}
 
+
+	/**
+	 * 使用账号密码方式登录授权
+	 * @param string $username 用户名
+	 * @param string $password 密码
+	 * @param string $scope 请求用户授权时向用户显示的可进行授权的列表，多个用空格分隔
+	 * @return void
+	 */
+	public function login($username, $password, $scope = 'user_info')
+	{
+		$response = $this->http->post($this->getUrl('oauth/token'), array(
+			'grant_type'	=>	'password',
+			'username'		=>	$username,
+			'password'		=>	$password,
+			'client_id'		=>	$this->appid,
+			'client_secret'	=>	$this->appSecret,
+			'scope'			=>	$scope,
+		));
+		$this->result = json_decode($response->body, true);
+		if(!isset($this->result['error']))
+		{
+			return $this->accessToken = $this->result['access_token'];
+		}
+		else
+		{
+			throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', $response->httpcode());
+		}
+	}
+
 	/**
 	 * 第一步:获取登录页面跳转url
 	 * @param string $callbackUrl 登录回调地址
@@ -56,20 +85,21 @@ class OAuth2 extends Base
 	 */
 	protected function __getAccessToken($storeState, $code = null, $state = null)
 	{
-		$this->result = json_decode($this->http->post($this->getUrl('oauth/token'), array(
+		$response = $this->http->post($this->getUrl('oauth/token'), array(
 			'grant_type'	=>	'authorization_code',
 			'code'			=>	isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
 			'client_id'		=>	$this->appid,
 			'redirect_uri'	=>	$this->getRedirectUri(),
 			'client_secret'	=>	$this->appSecret,
-		))->body, true);
+		));
+		$this->result = json_decode($response->body, true);
 		if(!isset($this->result['error']))
 		{
 			return $this->accessToken = $this->result['access_token'];
 		}
 		else
 		{
-			throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', isset($this->result['error']) ? $this->result['error'] : '');
+			throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', $response->httpcode());
 		}
 	}
 
