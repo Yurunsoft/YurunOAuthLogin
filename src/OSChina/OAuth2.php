@@ -56,21 +56,22 @@ class OAuth2 extends Base
 	 */
 	protected function __getAccessToken($storeState, $code = null, $state = null)
 	{
-		$this->result = json_decode($this->http->get($this->getUrl('action/openapi/token'), array(
+		$response = $this->http->get($this->getUrl('action/openapi/token'), array(
 			'client_id'		=>	$this->appid,
 			'client_secret'	=>	$this->appSecret,
 			'grant_type'	=>	'authorization_code',
 			'redirect_uri'	=>	$this->getRedirectUri(),
 			'code'			=>	isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
 			'dataType'		=>	'json',
-		))->body, true);
+		));
+		$this->result = json_decode($response->body, true);
 		if(!isset($this->result['error']))
 		{
 			return $this->accessToken = $this->result['access_token'];
 		}
 		else
 		{
-			throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', isset($this->result['error']) ? $this->result['error'] : '');
+			throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', $response->httpcode());
 		}
 	}
 
@@ -81,10 +82,11 @@ class OAuth2 extends Base
 	 */
 	public function getUserInfo($accessToken = null)
 	{
-		$this->result = json_decode($this->http->get($this->getUrl('action/openapi/user', array(
+		$response = $this->http->get($this->getUrl('action/openapi/user', array(
 			'access_token'	=>	null === $accessToken ? $this->accessToken : $accessToken,
 			'dataType'		=>	'json',
-		)))->body, true);
+		)));
+		$this->result = json_decode($response->body, true);
 		if(isset($this->result['id']))
 		{
 			$this->openid = $this->result['id'];
@@ -92,7 +94,7 @@ class OAuth2 extends Base
 		}
 		else
 		{
-			throw new ApiException(isset($this->result['error']) ? $this->result['error'] : '', isset($this->result['error_description']) ? $this->result['error_description'] : '');
+			throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', $response->httpcode());
 		}
 	}
 
@@ -103,21 +105,22 @@ class OAuth2 extends Base
 	 */
 	public function refreshToken($refreshToken)
 	{
-		$this->result = json_decode($this->http->get($this->getUrl('action/openapi/token'), array(
+		$response = $this->http->get($this->getUrl('action/openapi/token'), array(
 			'client_id'		=>	$this->appid,
 			'client_secret'	=>	$this->appSecret,
 			'grant_type'	=>	'refresh_token',
 			'redirect_uri'	=>	$this->getRedirectUri(),
 			'refresh_token'	=>	$refreshToken,
 			'dataType'		=>	'json',
-		))->body, true);
+		));
+		$this->result = json_decode($response->body, true);
 		if(!isset($this->result['error']))
 		{
 			return $this->accessToken = $this->result['access_token'];
 		}
 		else
 		{
-			throw new ApiException(isset($this->result['error']) ? $this->result['error'] : '', isset($this->result['error_description']) ? $this->result['error_description'] : '');
+			throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', $response->httpcode());
 		}
 	}
 
