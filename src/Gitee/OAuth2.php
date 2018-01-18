@@ -25,8 +25,8 @@ class OAuth2 extends Base
 	/**
 	 * 第一步:获取登录页面跳转url
 	 * @param string $callbackUrl 登录回调地址
-	 * @param string $state coding无用
-	 * @param array $scope 请求用户授权时向用户显示的可进行授权的列表，多个用逗号分隔
+	 * @param string $state 状态值，不传则自动生成，随后可以通过->state获取。用于第三方应用防止CSRF攻击，成功授权后回调时会原样带回。一般为每个用户登录时随机生成state存在session中，登录回调中判断state是否和session中相同
+	 * @param array $scope 无用
 	 * @return string
 	 */
 	public function getAuthUrl($callbackUrl = null, $state = null, $scope = null)
