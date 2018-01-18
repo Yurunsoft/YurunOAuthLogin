@@ -172,16 +172,16 @@ abstract class Base
 	 * @param array $scope 请求用户授权时向用户显示的可进行授权的列表。可空
 	 * @return string
 	 */
-	public abstract function getAuthUrl($redirectUri = null, $state = null, $scope = null);
+	public abstract function getAuthUrl($callbackUrl = null, $state = null, $scope = null);
 
 	/**
 	 * 第二步:处理回调并获取access_token。与getAccessToken不同的是会验证state值是否匹配，防止csrf攻击。
 	 * @param string $storeState 存储的正确的state
-	 * @param string $code 第一步里$redirectUri地址中传过来的code，为null则通过get参数获取
+	 * @param string $code 第一步里$callbackUrl地址中传过来的code，为null则通过get参数获取
 	 * @param string $state 回调接收到的state，为null则通过get参数获取
 	 * @return string
 	 */
-	public function getAccessToken($storeState, $code = null, $state = null)
+	public function getAccessToken($storeState = '', $code = null, $state = null)
 	{
 		if(!$this->checkState($storeState, $state))
 		{
@@ -193,7 +193,7 @@ abstract class Base
 	/**
 	 * 第二步:处理回调并获取access_token。与getAccessToken不同的是会验证state值是否匹配，防止csrf攻击。
 	 * @param string $storeState 存储的正确的state
-	 * @param string $code 第一步里$redirectUri地址中传过来的code，为null则通过get参数获取
+	 * @param string $code 第一步里$callbackUrl地址中传过来的code，为null则通过get参数获取
 	 * @param string $state 回调接收到的state，为null则通过get参数获取
 	 * @return string
 	 */
