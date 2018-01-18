@@ -9,7 +9,7 @@ class OAuth2 extends Base
 	/**
 	 * api域名
 	 */
-	const API_DOMAIN = 'http://www.oschina.net/';
+	const API_DOMAIN = 'https://www.oschina.net/';
 
 	/**
 	 * 获取url地址
