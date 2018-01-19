@@ -47,7 +47,7 @@ class OAuth2 extends Base
 		}
 		else
 		{
-			throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', $response->httpcode());
+			throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', $response->httpCode());
 		}
 	}
 
@@ -99,7 +99,7 @@ class OAuth2 extends Base
 		}
 		else
 		{
-			throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', $response->httpcode());
+			throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', $response->httpCode());
 		}
 	}
 

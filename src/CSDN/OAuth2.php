@@ -22,7 +22,6 @@ class OAuth2 extends Base
 		return static::API_DOMAIN . $name . (empty($params) ? '' : ('?' . $this->http_build_query($params)));
 	}
 
-
 	/**
 	 * 使用账号密码方式登录授权
 	 * @param string $username 用户名
