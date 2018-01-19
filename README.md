@@ -1,6 +1,6 @@
 # YurunOAuthLogin
 
-YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、微博、Github。可以轻松嵌入支持 PHP >= 5.4 的任何系统中。
+YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、微博、Github等常用接口。可以轻松嵌入支持 PHP >= 5.4 的任何系统中。
 
 我们有完善的在线技术文档：[http://doc.yurunsoft.com/YurunOAuthLogin](http://doc.yurunsoft.com/YurunOAuthLogin)
 
@@ -11,9 +11,14 @@ YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、�
 ## 支持的登录平台
 
 - QQ
-- 微信
+- 微信网页扫码、微信内授权
 - 微博
+- 百度
 - Github
+- Gitee
+- Coding
+- 开源中国(OSChina)
+- CSDN
 
 > 后续将不断添加新的平台支持，也欢迎你来提交PR，一起完善！
 

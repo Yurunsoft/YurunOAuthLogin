@@ -1,6 +1,6 @@
 {
     "name": "yurunsoft/yurun-oauth-login",
-    "description": "YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、微博、Github。可以轻松嵌入支持 PHP >= 5.4 的任何系统中。",
+    "description": "YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、微博、Github等常用接口。可以轻松嵌入支持 PHP >= 5.4 的任何系统中。",
 	"type": "library",
     "license": "MIT",
     "autoload": {
