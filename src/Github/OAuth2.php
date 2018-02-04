@@ -62,7 +62,7 @@ class OAuth2 extends Base
 		);
 		if(null === $this->loginAgentUrl)
 		{
-			return $this->getUrl('login/oauth/authorize', $option);
+			return $this->getAuthLoginUrl('login/oauth/authorize', $option);
 		}
 		else
 		{
