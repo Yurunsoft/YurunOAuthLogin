@@ -1,6 +1,6 @@
 # YurunOAuthLogin
 
-YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、微博、Github等常用接口。可以轻松嵌入支持 PHP >= 5.4 的任何系统中。
+YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、微博、Github等常用接口。可以轻松嵌入支持 PHP >= 5.4 的任何系统中，1.3 版现已支持 Swoole 协程环境。
 
 我们有完善的在线技术文档：[http://doc.yurunsoft.com/YurunOAuthLogin](http://doc.yurunsoft.com/YurunOAuthLogin)
 
@@ -84,6 +84,12 @@ $qqOAuth->loginAgentUrl = 'http://localhost/test/QQ/loginAgent.php';
 $url = $qqOAuth->getAuthUrl();
 $_SESSION['YURUN_QQ_STATE'] = $qqOAuth->state;
 header('location:' . $url);
+```
+
+### Swoole 协程环境支持
+
+```php
+\Yurun\Util\YurunHttp::setDefaultHandler('Yurun\Util\YurunHttp\Handler\Swoole');
 ```
 
 ## 特别鸣谢

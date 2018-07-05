@@ -56,6 +56,7 @@ function callback($request, $response)
 	$state = file_get_contents(__DIR__ . '/state.txt');
 	echo 'state:', $state, PHP_EOL;
 	$response->end(json_encode([
+		// swoole 协程模式下的用法，就是参数都是要传的，以往不传可以自动从 $_GET /$_SERVER 等超全局变量中获取，现在必须手动传入
 		'access_token:' => $qqOAuth->getAccessToken($state, $request->get['code'], $request->get['state']),
 		'我也是access_token:' => $qqOAuth->accessToken,
 		'请求返回:' => $qqOAuth->result,
