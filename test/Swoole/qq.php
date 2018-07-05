@@ -5,6 +5,7 @@
  * 运行方式：php test/Swoole/qq.php
  * 
  * 请勿直接将本文件用于生产环境，仅作为演示用
+ * Swoole 暂时仅有 QQ 登录演示，但其实用法和传统方式基本一致
  */
 require dirname(__DIR__) . '/common.php';
 
