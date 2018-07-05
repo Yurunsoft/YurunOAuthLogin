@@ -1,6 +1,12 @@
 # YurunOAuthLogin
 
-YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、微博、Github等常用接口。可以轻松嵌入支持 PHP >= 5.4 的任何系统中，1.3 版现已支持 Swoole 协程环境。
+[![Latest Version](https://img.shields.io/packagist/v/yurunsoft/yurun-http.svg)](https://packagist.org/packages/yurunsoft/yurun-oauth-login)
+[![IMI Doc](https://img.shields.io/badge/docs-passing-green.svg)](http://doc.yurunsoft.com/YurunOAuthLogin)
+[![IMI License](https://img.shields.io/github/license/Yurunsoft/YurunHttp.svg)](https://github.com/Yurunsoft/YurunOAuthLogin/blob/master/LICENSE)
+
+## 介绍
+
+YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、微博、Github等常用接口。可以轻松嵌入支持 PHP >= 5.4 的任何系统中，2.0 版现已支持 Swoole 协程环境。
 
 我们有完善的在线技术文档：[http://doc.yurunsoft.com/YurunOAuthLogin](http://doc.yurunsoft.com/YurunOAuthLogin)
 
