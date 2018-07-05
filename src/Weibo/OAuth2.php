@@ -83,13 +83,13 @@ class OAuth2 extends Base
 	 */
 	protected function __getAccessToken($storeState, $code = null, $state = null)
 	{
-		$this->result = json_decode($this->http->post($this->getUrl('oauth2/access_token'), array(
+		$this->result = $this->http->post($this->getUrl('oauth2/access_token'), array(
 			'client_id'		=>	$this->appid,
 			'client_secret'	=>	$this->appSecret,
 			'grant_type'	=>	'authorization_code',
 			'code'			=>	isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
 			'redirect_uri'	=>	$this->getRedirectUri(),
-		))->body, true);
+		))->json(true);
 		if(isset($this->result['error_code']))
 		{
 			throw new ApiException($this->result['error'], $this->result['error_code']);
@@ -108,11 +108,11 @@ class OAuth2 extends Base
 	 */
 	public function getUserInfo($accessToken = null)
 	{
-		$this->result = json_decode($this->http->get($this->getUrl('2/users/show.json', array(
+		$this->result = $this->http->get($this->getUrl('2/users/show.json', array(
 			'access_token'	=>	null === $accessToken ? $this->accessToken : $accessToken,
 			'uid'			=>	$this->openid,
 			'screenName'	=>	$this->screenName,
-		)))->body, true);
+		)))->json(true);
 		if(isset($this->result['error_code']))
 		{
 			throw new ApiException($this->result['error'], $this->result['error_code']);
@@ -141,9 +141,9 @@ class OAuth2 extends Base
 	 */
 	public function validateAccessToken($accessToken = null)
 	{
-		$this->result = json_decode($this->http->post($this->getUrl('oauth2/get_token_info'), array(
+		$this->result = $this->http->post($this->getUrl('oauth2/get_token_info'), array(
 			'access_token'	=>	null === $accessToken ? $this->accessToken : $accessToken,
-		))->body, true);
+		))->json(true);
 		if(isset($this->result['error_code']))
 		{
 			throw new ApiException($this->result['error'], $this->result['error_code']);

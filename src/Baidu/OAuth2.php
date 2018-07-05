@@ -98,7 +98,7 @@ class OAuth2 extends Base
 			'client_secret'	=>	$this->appSecret,
 			'redirect_uri'	=>	$this->getRedirectUri(),
 		));
-		$this->result = json_decode($response->body, true);
+		$this->result = $response->json(true);
 		if(!isset($this->result['error_description']))
 		{
 			return $this->accessToken = $this->result['access_token'];
@@ -119,7 +119,7 @@ class OAuth2 extends Base
 		$response = $this->http->get($this->getUrl('rest/2.0/passport/users/getLoggedInUser', array(
 			'access_token'	=>	null === $accessToken ? $this->accessToken : $accessToken,
 		)));
-		$this->result = json_decode($response->body, true);
+		$this->result = $response->json(true);
 		if(!isset($this->result['error_description']))
 		{
 			$this->openid = $this->result['uid'];
@@ -145,7 +145,7 @@ class OAuth2 extends Base
 			'client_secret'	=>	$this->appSecret,
 			'scope'			=>	$this->scope,
 		));
-		$this->result = json_decode($response->body, true);
+		$this->result = $response->json(true);
 		if(!isset($this->result['error_description']))
 		{
 			return $this->accessToken = $this->result['access_token'];

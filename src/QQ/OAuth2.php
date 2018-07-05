@@ -83,7 +83,7 @@ class OAuth2 extends Base
 			'code'			=>	isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
 			'state'			=>	isset($state) ? $state : (isset($_GET['state']) ? $_GET['state'] : ''),
 			'redirect_uri'	=>	$this->getRedirectUri(),
-		)))->body, $result);
+		)))->body(), $result);
 		$this->result = $result;
 		if(isset($this->result['code']) && 0 != $this->result['code'])
 		{
@@ -106,11 +106,11 @@ class OAuth2 extends Base
 		{
 			$this->getOpenID($accessToken);
 		}
-		$this->result = json_decode($this->http->get($this->getUrl('user/get_user_info', array(
+		$this->result = $this->http->get($this->getUrl('user/get_user_info', array(
 			'access_token'			=>	null === $accessToken ? $this->accessToken : $accessToken,
 			'oauth_consumer_key'	=>	$this->appid,
 			'openid'				=>	$this->openid,
-		)))->body, true);
+		)))->json(true);
 		if(isset($this->result['ret']) && 0 != $this->result['ret'])
 		{
 			throw new ApiException($this->result['msg'], $this->result['ret']);
@@ -128,12 +128,12 @@ class OAuth2 extends Base
 	 */
 	public function refreshToken($refreshToken)
 	{
-		$this->result = $this->jsonp_decode($this->http->get($this->getUrl('oauth2.0/token', array(
+		$this->result = $this->http->get($this->getUrl('oauth2.0/token', array(
 			'grant_type'	=>	'refresh_token',
 			'client_id'		=>	$this->appid,
 			'client_secret'	=>	$this->appSecret,
 			'refresh_token'	=>	$refreshToken,
-		)))->body, true);
+		)))->jsonp(true);
 		return isset($this->result['code']) && 0 == $this->result['code'];
 	}
 
@@ -169,7 +169,7 @@ class OAuth2 extends Base
 		{
 			$params['unionid'] = $this->openidMode;
 		}
-		$this->result = $this->jsonp_decode($this->http->get($this->getUrl('oauth2.0/me', $params))->body, true);
+		$this->result = $this->http->get($this->getUrl('oauth2.0/me', $params))->jsonp(true);
 		if(isset($this->result['code']) && 0 != $this->result['code'])
 		{
 			throw new ApiException($this->result['msg'], $this->result['code']);

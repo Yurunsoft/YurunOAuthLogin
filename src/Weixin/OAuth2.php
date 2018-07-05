@@ -109,12 +109,12 @@ class OAuth2 extends Base
 	 */
 	protected function __getAccessToken($storeState, $code = null, $state = null)
 	{
-		$this->result = json_decode($this->http->get($this->getUrl('sns/oauth2/access_token', array(
+		$this->result = $this->http->get($this->getUrl('sns/oauth2/access_token', array(
 			'appid'			=>	$this->appid,
 			'secret'		=>	$this->appSecret,
 			'code'			=>	isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
 			'grant_type'	=>	'authorization_code',
-		)))->body, true);
+		)))->json(true);
 		if(isset($this->result['errcode']) && 0 != $this->result['errcode'])
 		{
 			throw new ApiException($this->result['errmsg'], $this->result['errcode']);
@@ -144,11 +144,11 @@ class OAuth2 extends Base
 	 */
 	public function getUserInfo($accessToken = null)
 	{
-		$this->result = json_decode($this->http->get($this->getUrl('sns/userinfo', array(
+		$this->result = $this->http->get($this->getUrl('sns/userinfo', array(
 			'access_token'	=>	null === $accessToken ? $this->accessToken : $accessToken,
 			'openid'		=>	$this->openid,
 			'lang'			=>	$this->lang,
-		)))->body, true);
+		)))->json(true);
 		if(isset($this->result['errcode']) && 0 != $this->result['errcode'])
 		{
 			throw new ApiException($this->result['errmsg'], $this->result['errcode']);
@@ -166,11 +166,11 @@ class OAuth2 extends Base
 	 */
 	public function refreshToken($refreshToken)
 	{
-		$this->result = json_decode($this->http->get($this->getUrl('sns/oauth2/refresh_token', array(
+		$this->result = $this->http->get($this->getUrl('sns/oauth2/refresh_token', array(
 			'appid'			=>	$this->appid,
 			'grant_type'	=>	'refresh_token',
 			'refresh_token'	=>	$refreshToken,
-		)))->body, true);
+		)))->json(true);
 		return isset($this->result['errcode']) && 0 == $this->result['errcode'];
 	}
 
@@ -181,10 +181,10 @@ class OAuth2 extends Base
 	 */
 	public function validateAccessToken($accessToken = null)
 	{
-		$this->result = json_decode($this->http->get($this->getUrl('sns/auth', array(
+		$this->result = $this->http->get($this->getUrl('sns/auth', array(
 			'access_token'	=>	null === $accessToken ? $this->accessToken : $accessToken,
 			'openid'		=>	$this->openid,
-		)))->body, true);
+		)))->json(true);
 		return isset($this->result['errcode']) && 0 == $this->result['errcode'];
 	}
 

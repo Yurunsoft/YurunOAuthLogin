@@ -37,7 +37,7 @@ class OAuth2 extends Base
 			'client_id'		=>	$this->appid,
 			'client_secret'	=>	$this->appSecret,
 		));
-		$this->result = json_decode($response->body, true);
+		$this->result = $response->json(true);
 		if(!isset($this->result['error_code']))
 		{
 			return $this->accessToken = $this->result['access_token'];
@@ -88,7 +88,7 @@ class OAuth2 extends Base
 			'client_secret'	=>	$this->appSecret,
 			'redirect_uri'	=>	$this->getRedirectUri(),
 		));
-		$this->result = json_decode($response->body, true);
+		$this->result = $response->json(true);
 		if(!isset($this->result['error_code']))
 		{
 			return $this->accessToken = $this->result['access_token'];
@@ -109,7 +109,7 @@ class OAuth2 extends Base
 		$response = $this->http->get($this->getUrl('user/getinfo', array(
 			'access_token'	=>	null === $accessToken ? $this->accessToken : $accessToken,
 		)));
-		$this->result = json_decode($response->body, true);
+		$this->result = $response->json(true);
 		if(!isset($this->result['error_code']))
 		{
 			$this->openid = $this->result['username'];

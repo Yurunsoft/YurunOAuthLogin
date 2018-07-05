@@ -56,12 +56,12 @@ class OAuth2 extends Base
 	 */
 	protected function __getAccessToken($storeState, $code = null, $state = null)
 	{
-		$this->result = json_decode($this->http->get($this->getUrl('api/oauth/access_token'), array(
+		$this->result = $this->http->get($this->getUrl('api/oauth/access_token'), array(
 			'client_id'		=>	$this->appid,
 			'client_secret'	=>	$this->appSecret,
 			'grant_type'	=>	'authorization_code',
 			'code'			=>	isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
-		))->body, true);
+		))->json(true);
 		if($this->isSuccess($this->result))
 		{
 			return $this->accessToken = $this->result['access_token'];
@@ -79,9 +79,9 @@ class OAuth2 extends Base
 	 */
 	public function getUserInfo($accessToken = null)
 	{
-		$this->result = json_decode($this->http->get($this->getUrl('api/account/current_user', array(
+		$this->result = $this->http->get($this->getUrl('api/account/current_user', array(
 			'access_token'	=>	null === $accessToken ? $this->accessToken : $accessToken,
-		)))->body, true);
+		)))->json(true);
 		if($this->isSuccess($this->result))
 		{
 			$this->openid = $this->result['data']['global_key'];

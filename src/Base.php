@@ -1,13 +1,13 @@
 <?php
 namespace Yurun\OAuthLogin;
 
-use Yurun\Until\HttpRequest;
+use Yurun\Util\HttpRequest;
 
 abstract class Base
 {
 	/**
 	 * http请求类
-	 * @var Yurun\Until\HttpRequest
+	 * @var Yurun\Util\HttpRequest
 	 */
 	public $http;
 

@@ -79,13 +79,13 @@ class OAuth2 extends Base
 	 */
 	protected function __getAccessToken($storeState, $code = null, $state = null)
 	{
-		$this->result = json_decode($this->http->accept('application/json')->get($this->getAuthLoginUrl('login/oauth/access_token', array(
+		$this->result = $this->http->accept('application/json')->get($this->getAuthLoginUrl('login/oauth/access_token', array(
 			'client_id'			=>	$this->appid,
 			'client_secret'		=>	$this->appSecret,
 			'code'				=>	isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
 			'redirect_uri'		=>	$this->getRedirectUri(),
 			'state'				=>	isset($state) ? $state : (isset($_GET['state']) ? $_GET['state'] : ''),
-		)))->body, true);
+		)))->json(true);
 		if(isset($this->result['error']))
 		{
 			throw new ApiException($this->result['error'], 0);
@@ -103,9 +103,9 @@ class OAuth2 extends Base
 	 */
 	public function getUserInfo($accessToken = null)
 	{
-		$this->result = json_decode($this->http->ua('YurunOAuthLogin')->get($this->getUrl('user', array(
+		$this->result = $this->http->ua('YurunOAuthLogin')->get($this->getUrl('user', array(
 			'access_token'			=>	null === $accessToken ? $this->accessToken : $accessToken,
-		)))->body, true);
+		)))->json(true);
 		if(isset($this->result['message']))
 		{
 			throw new ApiException($this->result['message'], 0);

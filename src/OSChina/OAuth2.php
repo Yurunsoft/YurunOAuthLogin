@@ -64,7 +64,7 @@ class OAuth2 extends Base
 			'code'			=>	isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
 			'dataType'		=>	'json',
 		));
-		$this->result = json_decode($response->body, true);
+		$this->result = $response->json(true);
 		if(!isset($this->result['error']))
 		{
 			return $this->accessToken = $this->result['access_token'];
@@ -86,7 +86,7 @@ class OAuth2 extends Base
 			'access_token'	=>	null === $accessToken ? $this->accessToken : $accessToken,
 			'dataType'		=>	'json',
 		)));
-		$this->result = json_decode($response->body, true);
+		$this->result = $response->json(true);
 		if(isset($this->result['id']))
 		{
 			$this->openid = $this->result['id'];
@@ -113,7 +113,7 @@ class OAuth2 extends Base
 			'refresh_token'	=>	$refreshToken,
 			'dataType'		=>	'json',
 		));
-		$this->result = json_decode($response->body, true);
+		$this->result = $response->json(true);
 		if(!isset($this->result['error']))
 		{
 			return $this->accessToken = $this->result['access_token'];
