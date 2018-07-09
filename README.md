@@ -37,7 +37,7 @@ API 文档：[https://apidoc.gitee.com/yurunsoft/YurunOAuthLogin](https://apidoc
 ```json
 {
     "require": {
-        "yurunsoft/yurun-oauth-login": "1.*"
+        "yurunsoft/yurun-oauth-login": "~2.0"
     }
 }
 ```
