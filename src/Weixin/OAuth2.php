@@ -188,4 +188,43 @@ class OAuth2 extends Base
 		return isset($this->result['errcode']) && 0 == $this->result['errcode'];
 	}
 
+	/**
+	 * 微信小程序登录凭证校验，获取session_key、openid、unionid
+	 * 返回session_key
+	 * 调用后可以使用$this->result['openid']或$this->result['unionid']获取相应的值
+	 * 
+	 * @param string $jsCode
+	 * @return string
+	 */
+	public function getSessionKey($jsCode)
+	{
+		$this->result = $this->http->get($this->getUrl('sns/jscode2session', array(
+			'appid'		=>	$this->appid,
+			'secret'	=>	$this->appSecret,
+			'js_code'	=>	$jsCode,
+			'grant_type'=>	'authorization_code',
+		)))->json(true);
+
+		if(isset($this->result['errcode']) && 0 != $this->result['errcode'])
+		{
+			throw new ApiException($this->result['errmsg'], $this->result['errcode']);
+		}
+		else
+		{
+			switch((int)$this->openidMode)
+			{
+				case OpenidMode::OPEN_ID:
+					$this->openid = $this->result['openid'];
+					break;
+				case OpenidMode::UNION_ID:
+					$this->openid = $this->result['unionid'];
+					break;
+				case OpenidMode::UNION_ID_FIRST:
+					$this->openid = empty($this->result['unionid']) ? $this->result['openid'] : $this->result['unionid'];
+					break;
+			}
+		}
+
+		return $this->result['session_key'];
+	}
 }
