@@ -19,7 +19,7 @@ API 文档：[https://apidoc.gitee.com/yurunsoft/YurunOAuthLogin](https://apidoc
 ## 支持的登录平台
 
 - QQ
-- 微信网页扫码、微信内授权
+- 微信网页扫码、微信内授权、小程序授权
 - 微博
 - 百度
 - Github
