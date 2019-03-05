@@ -12,7 +12,9 @@ YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、�
 
 API 文档：[https://apidoc.gitee.com/yurunsoft/YurunOAuthLogin](https://apidoc.gitee.com/yurunsoft/YurunOAuthLogin)
 
-同时欢迎各位加入技术支持群：74401592 [![点击加群](https://pub.idqqimg.com/wpa/images/group.png "点击加群")](https://shang.qq.com/wpa/qunwpa?idkey=e2e6b49e9a648aae5285b3aba155d59107bb66fde02e229e078bd7359cac8ac3)，如有问题可以及时解答和修复。
+宇润PHP全家桶群：17916227 [![点击加群](https://pub.idqqimg.com/wpa/images/group.png "点击加群")](https://jq.qq.com/?_wv=1027&k=5wXf4Zq)，如有问题会有人解答和修复。
+
+程序员日常划水群：74401592 [![点击加群](https://pub.idqqimg.com/wpa/images/group.png "点击加群")](https://shang.qq.com/wpa/qunwpa?idkey=e2e6b49e9a648aae5285b3aba155d59107bb66fde02e229e078bd7359cac8ac3)。
 
 大家在开发中肯定会对接各种各样的第三方平台，我个人精力有限，欢迎各位来提交 PR （[码云](https://gitee.com/yurunsoft/YurunOAuthLogin)/[Github](https://github.com/Yurunsoft/YurunOAuthLogin)），一起完善它，让它能够支持更多的平台，更加好用。
 
@@ -103,3 +105,9 @@ header('location:' . $url);
 ## 特别鸣谢
 
 * [GetWeixinCode](https://github.com/HADB/GetWeixinCode "GetWeixinCode")
+
+## 捐赠
+
+<img src="https://raw.githubusercontent.com/Yurunsoft/YurunOAuthLogin/master/res/pay.png"/>
+
+开源不求盈利，多少都是心意，生活不易，随缘随缘……
