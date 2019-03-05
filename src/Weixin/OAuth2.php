@@ -60,7 +60,7 @@ class OAuth2 extends Base
 			'appid'				=>	$this->appid,
 			'redirect_uri'		=>	null === $callbackUrl ? (null === $this->callbackUrl ? (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') : $this->callbackUrl) : $callbackUrl,
 			'response_type'		=>	'code',
-			'scope'				=>	null === $scope ? (null === $this->scope ? 'snsapi_login' : $this->scope) : null,
+			'scope'				=>	null === $scope ? (null === $this->scope ? 'snsapi_login' : $this->scope) : $scope,
 			'state'				=>	$this->getState($state),
 		);
 		if(null === $this->loginAgentUrl)
@@ -86,7 +86,7 @@ class OAuth2 extends Base
 			'appid'				=>	$this->appid,
 			'redirect_uri'		=>	null === $callbackUrl ? (null === $this->callbackUrl ? (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') : $this->callbackUrl) : $callbackUrl,
 			'response_type'		=>	'code',
-			'scope'				=>	null === $scope ? (null === $this->scope ? 'snsapi_userinfo' : $this->scope) : null,
+			'scope'				=>	null === $scope ? (null === $this->scope ? 'snsapi_userinfo' : $this->scope) : $scope,
 			'state'				=>	$this->getState($state),
 		);
 		if(null === $this->loginAgentUrl)
