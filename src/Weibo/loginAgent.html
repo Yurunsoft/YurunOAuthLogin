@@ -62,7 +62,16 @@
 
                     if (!code) {
                         //第一步，没有拿到code，跳转至授权页面获取code
-                        redirectUri = GWC.appendParams('https://api.weibo.com/oauth2/authorize', {
+                        var url;
+                        if('mobile' === display)
+                        {
+                            url = 'https://open.weibo.cn/oauth2/authorize';
+                        }
+                        else
+                        {
+                            url = 'https://api.weibo.com/oauth2/authorize';
+                        }
+                        redirectUri = GWC.appendParams(url, {
                             'client_id': appId,
                             'redirect_uri': encodeURIComponent(location.href),
                             'scope': scope,

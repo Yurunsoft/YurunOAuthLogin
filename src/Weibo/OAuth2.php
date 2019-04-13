@@ -12,6 +12,11 @@ class OAuth2 extends Base
 	const API_DOMAIN = 'https://api.weibo.com/';
 
 	/**
+	 * 当display=mobile时，使用该域名
+	 */
+	const API_MOBILE_DOMAIN = 'https://open.weibo.cn/';
+
+	/**
 	 * 授权页面的终端类型，取值见微博文档。http://open.weibo.com/wiki/Oauth2/authorize
 	 * @var string
 	 */
@@ -47,6 +52,17 @@ class OAuth2 extends Base
 	}
 
 	/**
+	 * 获取display=mobile时的url地址
+	 * @param string $name 跟在域名后的文本
+	 * @param array $params GET参数
+	 * @return string
+	 */
+	public function getMobileUrl($name, $params)
+	{
+		return static::API_MOBILE_DOMAIN . $name . (empty($params) ? '' : ('?' . $this->http_build_query($params)));
+	}
+
+	/**
 	 * 第一步:获取登录页面跳转url
 	 * @param string $callbackUrl 登录回调地址
 	 * @param string $state 状态值，不传则自动生成，随后可以通过->state获取。用于第三方应用防止CSRF攻击，成功授权后回调时会原样带回。一般为每个用户登录时随机生成state存在session中，登录回调中判断state是否和session中相同
@@ -66,7 +82,14 @@ class OAuth2 extends Base
 		);
 		if(null === $this->loginAgentUrl)
 		{
-			return $this->getUrl('oauth2/authorize', $option);
+			if('mobile' === $this->display)
+			{
+				return $this->getMobileUrl('oauth2/authorize', $option);
+			}
+			else
+			{
+				return $this->getUrl('oauth2/authorize', $option);
+			}
 		}
 		else
 		{
