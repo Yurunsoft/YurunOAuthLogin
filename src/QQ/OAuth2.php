@@ -188,4 +188,74 @@ class OAuth2 extends Base
 		}
 	}
 
+	/**
+	 * QQ小程序登录凭证校验，获取session_key、openid、unionid
+	 * 返回session_key
+	 * 调用后可以使用$this->result['openid']或$this->result['unionid']获取相应的值
+	 * 
+	 * @param string $jsCode
+	 * @return string
+	 */
+	public function getSessionKey($jsCode)
+	{
+		$this->result = $this->http->get('https://api.q.qq.com/sns/jscode2session', [
+			'appid'		=>	$this->appid,
+			'secret'	=>	$this->appSecret,
+			'js_code'	=>	$jsCode,
+			'grant_type'=>	'authorization_code',
+		])->json(true);
+
+		if(isset($this->result['errcode']) && 0 != $this->result['errcode'])
+		{
+			throw new ApiException($this->result['errmsg'], $this->result['errcode']);
+		}
+		else
+		{
+			switch((int)$this->openidMode)
+			{
+				case OpenidMode::OPEN_ID:
+					$this->openid = $this->result['openid'];
+					break;
+				case OpenidMode::UNION_ID:
+					$this->openid = $this->result['unionid'];
+					break;
+				case OpenidMode::UNION_ID_FIRST:
+					$this->openid = empty($this->result['unionid']) ? $this->result['openid'] : $this->result['unionid'];
+					break;
+			}
+		}
+
+		return $this->result['session_key'];
+	}
+
+	/**
+	 * 解密小程序 qq.getUserInfo() 敏感数据
+	 *
+	 * @param string $encryptedData
+	 * @param string $iv
+	 * @param string $sessionKey
+	 * @return array
+	 */
+	public function descryptData($encryptedData, $iv, $sessionKey)
+	{
+		if (strlen($sessionKey) != 24)
+		{
+			throw new \InvalidArgumentException('sessionKey 格式错误');
+		}
+		if (strlen($iv) != 24)
+		{
+			throw new \InvalidArgumentException('iv 格式错误');
+		}
+		$aesKey = base64_decode($sessionKey);
+		$aesIV = base64_decode($iv);
+		$aesCipher = base64_decode($encryptedData);
+		$result = openssl_decrypt($aesCipher, 'AES-128-CBC', $aesKey, 1, $aesIV);
+		$dataObj = json_decode($result, true);
+		if (!$dataObj)
+		{
+			throw new \InvalidArgumentException('反序列化数据失败');
+		}
+		return $dataObj;
+	}
+
 }
