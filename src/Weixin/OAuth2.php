@@ -227,4 +227,35 @@ class OAuth2 extends Base
 
 		return $this->result['session_key'];
 	}
+
+	/**
+	 * 解密小程序 wx.getUserInfo() 敏感数据
+	 *
+	 * @param string $encryptedData
+	 * @param string $iv
+	 * @param string $sessionKey
+	 * @return array
+	 */
+	public function descryptData($encryptedData, $iv, $sessionKey)
+	{
+		if (strlen($sessionKey) != 24)
+		{
+			throw new \InvalidArgumentException('sessionKey 格式错误');
+		}
+		if (strlen($iv) != 24)
+		{
+			throw new \InvalidArgumentException('iv 格式错误');
+		}
+		$aesKey = base64_decode($sessionKey);
+		$aesIV = base64_decode($iv);
+		$aesCipher = base64_decode($encryptedData);
+		$result = openssl_decrypt($aesCipher, 'AES-128-CBC', $aesKey, 1, $aesIV);
+		$dataObj = json_decode($result, true);
+		if (!$dataObj)
+		{
+			throw new \InvalidArgumentException('反序列化数据失败');
+		}
+		return $dataObj;
+	}
+
 }
