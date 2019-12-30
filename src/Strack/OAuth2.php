@@ -18,7 +18,7 @@ class OAuth2 extends Base
      */
     public function setBaseUser($url)
     {
-        $this->baseUser = $url;
+        $this->baseUser = $url.'/';
     }
 
     /**
