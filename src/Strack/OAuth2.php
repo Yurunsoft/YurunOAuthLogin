@@ -1,6 +1,6 @@
 <?php
 
-namespace Yurun\OAuthLogin\Gitee;
+namespace Yurun\OAuthLogin\Strack;
 
 use Yurun\OAuthLogin\Base;
 use Yurun\OAuthLogin\ApiException;
