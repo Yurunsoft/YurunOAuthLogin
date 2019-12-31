@@ -71,8 +71,10 @@ class OAuth2 extends Base
             'redirect_uri' => $this->getRedirectUri(),
             'app_secret' => $this->appSecret,
         ));
+
         $this->result = $response->json(true);
-        if ((int)isset($this->result['code']) === 0) {
+
+        if ((int)$this->result['code'] === 0) {
             return $this->accessToken = $this->result['data']['access_token'];
         } else {
             throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
@@ -91,7 +93,7 @@ class OAuth2 extends Base
             'access_token' => null === $accessToken ? $this->accessToken : $accessToken,
         )));
         $this->result = $response->json(true);
-        if ((int)isset($this->result['code']) === 0) {
+        if ((int)$this->result['code'] === 0) {
             $this->openid = $this->result['data']['id'];
             return $this->result;
         } else {
