@@ -18,7 +18,7 @@ class OAuth2 extends Base
      */
     public function setBaseUser($url)
     {
-        $this->baseUser = $url.'/';
+        $this->baseUser = $url . '/';
     }
 
     /**
@@ -70,6 +70,7 @@ class OAuth2 extends Base
             'app_key' => $this->appid,
             'redirect_uri' => $this->getRedirectUri(),
             'app_secret' => $this->appSecret,
+            'device_unique_code' => isset($_GET['device_unique_code']) ? $_GET['device_unique_code'] : '' // 传入设备唯一值
         ));
 
         $this->result = $response->json(true);
