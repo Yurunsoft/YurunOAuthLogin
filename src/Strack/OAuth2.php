@@ -83,6 +83,27 @@ class OAuth2 extends Base
     }
 
     /**
+     * 获取用户其他系统同一设备登录状态
+     * @param $deviceUniqueCode
+     * @return array
+     * @throws ApiException
+     */
+    public function getUserOssStatus($deviceUniqueCode)
+    {
+        $response = $this->http->get($this->getUrl('oauth/getUserOssStatus', array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'device_unique_code' => $deviceUniqueCode // 传入设备唯一值
+        )));
+        $this->result = $response->json(true);
+        if ((int)$this->result['code'] === 0) {
+            return $this->result['data'];
+        } else {
+            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
+        }
+    }
+
+    /**
      * 获取用户资料
      * @param null $accessToken
      * @return array
