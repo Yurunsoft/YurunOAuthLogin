@@ -177,6 +177,41 @@ class StrackOAuthSingle
     }
 
     /**
+     * 获取用户资料通过令牌
+     * @return array|mixed
+     */
+    public function getUserInfoByTempCode()
+    {
+
+        $url = $this->baseUrl."/oauth/getUserInfoByTempCode";
+        $param = array(
+            'code' => isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
+            'app_key' => $this->appId,
+            'app_secret' => $this->appSecret
+        );
+        $param = http_build_query($param, '', '&');
+        $url = $url . "?" . $param;
+
+        $response =$this->getUrl($url);
+
+        //--------检测错误是否发生
+        if (strpos($response, "callback") !== false) {
+            $lpos = strpos($response, "(");
+            $rpos = strrpos($response, ")");
+            $response = substr($response, $lpos + 1, $rpos - $lpos - 1);
+        }
+        $this->result = json_decode($response, true);
+
+        if ((int)$this->result['code'] === 0) {
+            $this->openid = $this->result['data']['id'];
+            return $this->result;
+        } else {
+            $errorMsg = isset($this->result['msg']) ? $this->result['msg'] : '';
+            exit($errorMsg);
+        }
+    }
+
+    /**
      * 刷新AccessToken续期
      * @param string $refreshToken
      * @return bool
