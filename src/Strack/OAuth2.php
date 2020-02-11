@@ -149,6 +149,28 @@ class OAuth2 extends Base
     }
 
     /**
+     * 获取用户资料通过令牌
+     * @return array|mixed
+     * @throws ApiException
+     */
+    public function getUserInfoByTempCode()
+    {
+        $response = $this->http->get($this->getUrl('oauth/getUserInfoByTempCode', array(
+            'code' => isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret
+        )));
+
+        $this->result = $response->json(true);
+        if ((int)$this->result['code'] === 0) {
+            $this->openid = $this->result['data']['id'];
+            return $this->result;
+        } else {
+            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
+        }
+    }
+
+    /**
      * 刷新AccessToken续期
      * @param string $refreshToken
      * @return bool
