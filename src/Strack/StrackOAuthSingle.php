@@ -177,6 +177,41 @@ class StrackOAuthSingle
     }
 
     /**
+     * 同步注册用户
+     * @param $data
+     * @return array
+     */
+    public function syncRegister($data)
+    {
+        $url = $this->baseUrl."/oauth/syncRegister";
+        $param = array(
+            'name' => $data['name'],
+            'phone' => $data['phone'],
+            'password' => !empty($data['password']) ? $data['password'] : '',
+            'sex' => !empty($data['sex']) ? $data['sex'] : 'male'
+        );
+        $param = http_build_query($param, '', '&');
+        $url = $url . "?" . $param;
+
+        $response =$this->getUrl($url);
+
+        //--------检测错误是否发生
+        if (strpos($response, "callback") !== false) {
+            $lpos = strpos($response, "(");
+            $rpos = strrpos($response, ")");
+            $response = substr($response, $lpos + 1, $rpos - $lpos - 1);
+        }
+        $this->result = json_decode($response, true);
+
+        if ((int)$this->result['code'] === 0) {
+            return $this->result;
+        } else {
+            $errorMsg = isset($this->result['msg']) ? $this->result['msg'] : '';
+            exit($errorMsg);
+        }
+    }
+
+    /**
      * 获取用户资料通过令牌
      * @param string $code
      * @return array|mixed

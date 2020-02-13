@@ -149,6 +149,29 @@ class OAuth2 extends Base
     }
 
     /**
+     * 同步注册用户
+     * @param $data
+     * @return array
+     * @throws ApiException
+     */
+    public function syncRegister($data)
+    {
+        $response = $this->http->get($this->getUrl('oauth/syncRegister', array(
+            'name' => $data['name'],
+            'phone' => $data['phone'],
+            'password' => !empty($data['password']) ? $data['password'] : '',
+            'sex' => !empty($data['sex']) ? $data['sex'] : 'male',
+        )));
+
+        $this->result = $response->json(true);
+        if ((int)$this->result['code'] === 0) {
+            return $this->result;
+        } else {
+            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
+        }
+    }
+
+    /**
      * 获取用户资料通过令牌
      * @param string $code
      * @return array
