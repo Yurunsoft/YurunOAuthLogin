@@ -173,11 +173,11 @@ class OAuth2 extends Base
 
     /**
      * 获取用户资料通过令牌
-     * @param string $code
+     * @param null $code
      * @return array
      * @throws ApiException
      */
-    public function getUserInfoByTempCode($code = '')
+    public function getUserInfoByTempCode($code = null)
     {
         $response = $this->http->get($this->getUrl('oauth/getUserInfoByTempCode', array(
             'code' => isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),

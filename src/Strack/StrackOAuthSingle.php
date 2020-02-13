@@ -213,10 +213,10 @@ class StrackOAuthSingle
 
     /**
      * 获取用户资料通过令牌
-     * @param string $code
+     * @param null $code
      * @return array|mixed
      */
-    public function getUserInfoByTempCode($code = '')
+    public function getUserInfoByTempCode($code = null)
     {
 
         $url = $this->baseUrl."/oauth/getUserInfoByTempCode";
