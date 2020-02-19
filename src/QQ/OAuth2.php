@@ -87,6 +87,7 @@ class OAuth2 extends Base
 		$jsonData = json_decode($content, true);
 		if($jsonData)
 		{
+			$this->result = $jsonData;
 			throw new ApiException($jsonData['error_description'], $jsonData['error']);
 		}
 		parse_str($content, $result);
