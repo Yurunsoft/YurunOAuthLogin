@@ -58,7 +58,7 @@ class OAuth2 extends Base
 	{
 		$option = array(
 			'app_id'			=>	$this->appid,
-			'scope'				=>	$scope ? $scope : 'auth_userinfo',
+			'scope'				=>	$scope ? $scope : 'auth_user',
 			'redirect_uri'		=>	null === $callbackUrl ? $this->callbackUrl : $callbackUrl,
 			'state'				=>	$this->getState($state),
 		);
@@ -141,7 +141,7 @@ class OAuth2 extends Base
 			throw new ApiException(sprintf('%s %s', $this->result['error_response']['msg'], $this->result['error_response']['sub_msg']), $this->result['error_response']['code']);
 		}
 		$this->result = $responseData = $this->result['alipay_user_info_share_response'];
-		if(isset($responseData['code']))
+		if(isset($responseData['code']) && 10000 != $responseData['code'])
 		{
 			throw new ApiException(sprintf('%s %s', $responseData['msg'], $responseData['sub_msg']), $responseData['code']);
 		}
