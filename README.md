@@ -16,12 +16,13 @@ API 文档：[https://apidoc.gitee.com/yurunsoft/YurunOAuthLogin](https://apidoc
 
 程序员日常划水群：74401592 [![点击加群](https://pub.idqqimg.com/wpa/images/group.png "点击加群")](https://shang.qq.com/wpa/qunwpa?idkey=e2e6b49e9a648aae5285b3aba155d59107bb66fde02e229e078bd7359cac8ac3)。
 
-大家在开发中肯定会对接各种各样的第三方平台，我个人精力有限，欢迎各位来提交 PR （[码云](https://gitee.com/yurunsoft/YurunOAuthLogin)/[Github](https://github.com/Yurunsoft/YurunOAuthLogin)），一起完善它，让它能够支持更多的平台，更加好用。
+大家在开发中肯定会对接各种各样的第三方平台，我个人精力有限，欢迎各位来提交 PR （[Github](https://github.com/Yurunsoft/YurunOAuthLogin)），一起完善它，让它能够支持更多的平台，更加好用。
 
 ## 支持的登录平台
 
 - QQ、QQ 小程序
 - 微信网页扫码、微信公众号、微信小程序
+- 支付宝网页、支付宝 APP、支付宝小程序
 - 微博
 - 百度
 - Github
