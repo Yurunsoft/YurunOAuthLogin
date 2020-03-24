@@ -6,7 +6,9 @@
 
 ## 介绍
 
-YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、微博、Github等常用接口。可以轻松嵌入支持 PHP >= 5.4 的任何系统中，2.0 版现已支持 Swoole 协程环境。
+YurunOAuthLogin是一个PHP 第三方登录授权 SDK，集成了QQ、微信、微博、Github等常用接口。
+
+无框架依赖，支持所有框架，支持 Swoole 协程环境。
 
 我们有完善的在线技术文档：[http://doc.yurunsoft.com/YurunOAuthLogin](http://doc.yurunsoft.com/YurunOAuthLogin)
 
@@ -37,6 +39,18 @@ API 文档：[https://apidoc.gitee.com/yurunsoft/YurunOAuthLogin](https://apidoc
 
 在您的composer.json中加入配置：
 
+`PHP >= 7.1.0`
+
+```json
+{
+    "require": {
+        "yurunsoft/yurun-oauth-login": "~3.0"
+    }
+}
+```
+
+`PHP >= 5.4.0 && PHP < 7.1.0`
+
 ```json
 {
     "require": {
@@ -44,6 +58,10 @@ API 文档：[https://apidoc.gitee.com/yurunsoft/YurunOAuthLogin](https://apidoc
     }
 }
 ```
+
+> 3.x 版本支持 PHP >= 7.1，持续迭代维护中
+
+> 2.x 版本支持 PHP >= 5.4，支持长期 BUG 维护，保证稳定可用，停止功能性更新
 
 ## 代码实例
 
