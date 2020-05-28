@@ -177,9 +177,9 @@ class OAuth2 extends Base
 			$params['unionid'] = $this->openidMode;
 		}
 		$this->result = $this->http->get($this->getUrl('oauth2.0/me', $params))->jsonp(true);
-		if(isset($this->result['code']) && 0 != $this->result['code'])
+		if(isset($this->result['error']))
 		{
-			throw new ApiException($this->result['msg'], $this->result['code']);
+			throw new ApiException($this->result['error_description'], $this->result['error']);
 		}
 		else
 		{
