@@ -10,15 +10,15 @@ class OAuth2 extends Base
     /**
      * api域名
      */
-    protected $baseUser = '';
+    protected $baseUrl = '';
 
     /**
      * 因为链接不确定所以需要手动设置
      * @param $url
      */
-    public function setBaseUser($url)
+    public function setBaseUrl($url)
     {
-        $this->baseUser = $url . '/';
+        $this->baseUrl = $url . '/';
     }
 
     /**
@@ -29,7 +29,7 @@ class OAuth2 extends Base
      */
     public function getUrl($name, $params = array())
     {
-        return $this->baseUser . $name . (empty($params) ? '' : ('?' . $this->http_build_query($params)));
+        return $this->baseUrl . $name . (empty($params) ? '' : ('?' . $this->http_build_query($params)));
     }
 
     /**
