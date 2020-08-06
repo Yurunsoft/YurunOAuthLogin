@@ -89,9 +89,9 @@ class OAuth2 extends Base
      * @return mixed
      * @throws ApiException
      */
-    public function getUserOssStatus($deviceUniqueCode, $state = null)
+    public function getUserSsoStatus($deviceUniqueCode, $state = null)
     {
-        $response = $this->http->get($this->getUrl('oauth/getUserOssStatus', array(
+        $response = $this->http->get($this->getUrl('oauth/getUserSsoStatus', array(
             'app_key' => $this->appid,
             'app_secret' => $this->appSecret,
             'state' => $this->getState($state),
@@ -112,9 +112,9 @@ class OAuth2 extends Base
      * @return mixed
      * @throws ApiException
      */
-    public function cancelUserOssStatus($deviceUniqueCode, $state = null)
+    public function cancelUserSsoStatus($deviceUniqueCode, $state = null)
     {
-        $response = $this->http->get($this->getUrl('oauth/cancelUserOssStatus', array(
+        $response = $this->http->get($this->getUrl('oauth/cancelUserSsoStatus', array(
             'app_key' => $this->appid,
             'app_secret' => $this->appSecret,
             'state' => $this->getState($state),
@@ -226,4 +226,136 @@ class OAuth2 extends Base
         }
     }
 
+    /**
+     * 获取用户其他系统同一设备登录状态
+     * @param $deviceUniqueCode
+     * @param $ip
+     * @return mixed
+     * @throws ApiException
+     */
+    public function getUserSsoStatusByDevice($deviceUniqueCode, $ip)
+    {
+        $response = $this->http->get($this->getUrl('oauth/getUserSsoStatusByDevice', array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'ip' => $ip,
+            'device_unique_code' => $deviceUniqueCode // 传入设备唯一值
+        )));
+        $this->result = $response->json(true);
+        if ((int)$this->result['code'] === 0) {
+            return $this->result['data'];
+        } else {
+            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
+        }
+    }
+
+    /**
+     * 通过用户主动登录来生成token
+     * @param array $loginData 登录数据
+     * @param $deviceUniqueCode
+     * @param string $ip 设备ip
+     * @return mixed
+     * @throws ApiException
+     */
+    public function generateTokenByLogin($loginData, $deviceUniqueCode, $ip)
+    {
+        $requestData = array_merge($loginData, array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'ip' => $ip,
+            'device_unique_code' => $deviceUniqueCode
+        ));
+        $response = $this->http->get($this->getUrl('oauth/login', $requestData));
+
+        $this->result = $response->json(true);
+
+        if ((int)$this->result['code'] === 0) {
+            return $this->result['data'];
+        } else {
+            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
+        }
+    }
+
+
+    /**
+     * 通过access_token 拉取用户信息
+     * @param $accessToken
+     * @param $deviceUniqueCode
+     * @param $ip
+     * @return mixed
+     * @throws ApiException
+     */
+    public function getUserInfoByAccessToken($accessToken, $deviceUniqueCode, $ip)
+    {
+        $requestData = array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'ip' => $ip,
+            'device_unique_code' => $deviceUniqueCode,
+        );
+        $response = $this->http->header("token", $accessToken)->get($this->getUrl('oauth/getInfo', $requestData));
+
+        $this->result = $response->json(true);
+
+        if ((int)$this->result['code'] === 0) {
+            return $this->result['data'];
+        } else {
+            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
+        }
+    }
+
+    /**
+     * 刷新AccessToken续期
+     * @param string $refreshToken
+     * @param $deviceUniqueCode
+     * @param $ip
+     * @return bool
+     * @throws ApiException
+     */
+    public function refreshTokenWithDeviceCode($refreshToken, $deviceUniqueCode, $ip)
+    {
+        $response = $this->http->get($this->getUrl('oauth/refreshToken', array(
+            'grant_type' => 'refresh_token',
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'refresh_token' => $refreshToken,
+            'device_unique_code' => $deviceUniqueCode,
+            'ip' => $ip,
+        )));
+
+        $this->result = $response->json(true);
+        if ((int)$this->result['code'] === 0) {
+            return $this->result['data'];
+        } else {
+            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
+        }
+    }
+
+    /**
+     * 检验授权凭证AccessToken是否有效 并且返回token的过期时间和关联用户id
+     * @param string $accessToken
+     * @param $deviceUniqueCode
+     * @param $ip
+     * @return bool
+     */
+    public function validateAccessTokenWithDeviceCode($accessToken, $deviceUniqueCode, $ip)
+    {
+        $requestData = array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'ip' => $ip,
+            'access_token' => $accessToken,
+            'device_unique_code' => $deviceUniqueCode, // 传入设备唯一值
+        );
+
+        $response = $this->http->get($this->getUrl('oauth/checkToken', $requestData));
+
+        $this->result = $response->json(true);
+
+        if ((int)$this->result['code'] === 0) {
+            return $this->result['data'];
+        } else {
+            return false;
+        }
+    }
 }

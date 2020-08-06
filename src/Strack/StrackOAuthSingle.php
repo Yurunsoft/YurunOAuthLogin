@@ -288,9 +288,9 @@ class StrackOAuthSingle
      * @param null $state
      * @return mixed
      */
-    public function getUserOssStatus($deviceUniqueCode, $state = null)
+    public function getUserSsoStatus($deviceUniqueCode, $state = null)
     {
-        $url = $this->baseUrl."/oauth/getUserOssStatus";
+        $url = $this->baseUrl."/oauth/getUserSsoStatus";
         $param = array(
             'app_key' => $this->appId,
             'app_secret' => $this->appSecret,
@@ -324,9 +324,9 @@ class StrackOAuthSingle
      * @param null $state
      * @return mixed
      */
-    public function cancelUserOssStatus($deviceUniqueCode, $state = null)
+    public function cancelUserSsoStatus($deviceUniqueCode, $state = null)
     {
-        $url = $this->baseUrl."/oauth/cancelUserOssStatus";
+        $url = $this->baseUrl."/oauth/cancelUserSsoStatus";
         $param = array(
             'app_key' => $this->appId,
             'app_secret' => $this->appSecret,
