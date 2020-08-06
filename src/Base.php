@@ -7,7 +7,7 @@ abstract class Base
 {
 	/**
 	 * http请求类
-	 * @var Yurun\Util\HttpRequest
+	 * @var HttpRequest
 	 */
 	public $http;
 
