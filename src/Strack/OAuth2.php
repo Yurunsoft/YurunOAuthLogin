@@ -309,7 +309,7 @@ class OAuth2 extends Base
      * @param string $refreshToken
      * @param $deviceUniqueCode
      * @param $ip
-     * @return bool
+     * @return array|bool
      * @throws ApiException
      */
     public function refreshTokenWithDeviceCode($refreshToken, $deviceUniqueCode, $ip)
@@ -356,6 +356,35 @@ class OAuth2 extends Base
             return $this->result['data'];
         } else {
             return false;
+        }
+    }
+
+    /**
+     * 取消授权的token
+     * @param $accessToken
+     * @param $deviceUniqueCode
+     * @param $ip
+     * @return mixed
+     * @throws ApiException
+     */
+    public function cancelAccessToken($accessToken, $deviceUniqueCode, $ip)
+    {
+        $requestData = array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'ip' => $ip,
+            'access_token' => $accessToken,
+            'device_unique_code' => $deviceUniqueCode, // 传入设备唯一值
+        );
+
+        $response = $this->http->header('token', $accessToken)->get($this->getUrl('oauth/logout', $requestData));
+
+        $this->result = $response->json(true);
+
+        if ((int)$this->result['code'] === 0) {
+            return $this->result['data'];
+        } else {
+            throw new ApiException($this->result['msg'], $this->result['code']);
         }
     }
 }
