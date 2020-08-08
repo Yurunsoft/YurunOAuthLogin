@@ -387,4 +387,58 @@ class OAuth2 extends Base
             throw new ApiException($this->result['msg'], $this->result['code']);
         }
     }
+
+    /**
+     * 远程调用
+     * @param $method
+     * @param $route
+     * @param $data
+     * @param $token
+     * @param string $deviceUniqueCode
+     * @param string $ip
+     * @return mixed
+     * @throws ApiException
+     */
+    public function remoteProcedureCallByAccessToken($method, $route, $data, $token, $deviceUniqueCode = "", $ip = "")
+    {
+        $requestData = array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'ip' => $ip,
+            'device_unique_code' => $deviceUniqueCode, // 传入设备唯一值
+        );
+        $requestData = array_merge($data, $requestData);
+        if (!empty($token)) {
+            $this->http->header('token', $token);
+        }
+
+        switch (strtolower($method)) {
+            case "post":
+                $response = $this->http->post($this->getUrl($route, $requestData));
+                break;
+            case "get":
+                $response = $this->http->get($this->getUrl($route, $requestData));
+                break;
+            case "put":
+                $response = $this->http->put($this->getUrl($route, $requestData));
+                break;
+            case "head":
+                $response = $this->http->head($this->getUrl($route, $requestData));
+                break;
+            case "patch":
+                $response = $this->http->patch($this->getUrl($route, $requestData));
+                break;
+            case "delete":
+                $response = $this->http->delete($this->getUrl($route, $requestData));
+                break;
+            default:
+                $response = $this->http->get($this->getUrl($route, $requestData));
+        }
+        $this->result = $response->json(true);
+        if ((int)$this->result['code'] === 0) {
+            return $this->result['data'];
+        } else {
+            throw new ApiException($this->result['msg'], $this->result['code']);
+        }
+    }
 }
