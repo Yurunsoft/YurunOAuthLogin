@@ -10,6 +10,6 @@
     },
     "require": {
         "php": ">=5.4",
-		"yurunsoft/yurun-http" : "~3.0"
+        "yurunsoft/yurun-http" : "^v4.2.0"
     }
 }
