@@ -73,13 +73,9 @@ class OAuth2 extends Base
             'device_unique_code' => isset($_GET['device_unique_code']) ? $_GET['device_unique_code'] : '' // 传入设备唯一值
         ));
 
-        $this->result = $response->json(true);
-
-        if ((int)$this->result['code'] === 0) {
-            return $this->accessToken = $this->result['data']['access_token'];
-        } else {
-            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
-        }
+        $this->handleResult($response);
+        $this->accessToken = $this->result['data']['access_token'];
+        return $this->accessToken;
     }
 
     /**
@@ -97,12 +93,7 @@ class OAuth2 extends Base
             'state' => $this->getState($state),
             'device_unique_code' => $deviceUniqueCode // 传入设备唯一值
         )));
-        $this->result = $response->json(true);
-        if ((int)$this->result['code'] === 0) {
-            return $this->result['data'];
-        } else {
-            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
-        }
+        return $this->handleResult($response);
     }
 
     /**
@@ -120,12 +111,8 @@ class OAuth2 extends Base
             'state' => $this->getState($state),
             'device_unique_code' => $deviceUniqueCode // 传入设备唯一值
         )));
-        $this->result = $response->json(true);
-        if ((int)$this->result['code'] === 0) {
-            return $this->result['data'];
-        } else {
-            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
-        }
+        $this->handleResult($response);
+        return $this->result['data'];
     }
 
     /**
@@ -139,13 +126,9 @@ class OAuth2 extends Base
         $response = $this->http->get($this->getUrl('oauth/getUserInfo', array(
             'access_token' => null === $accessToken ? $this->accessToken : $accessToken,
         )));
-        $this->result = $response->json(true);
-        if ((int)$this->result['code'] === 0) {
-            $this->openid = $this->result['data']['id'];
-            return $this->result;
-        } else {
-            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
-        }
+        $this->handleResult($response);
+        $this->openid = $this->result['data']['id'];
+        return $this->result;
     }
 
     /**
@@ -163,12 +146,8 @@ class OAuth2 extends Base
             'sex' => !empty($data['sex']) ? $data['sex'] : 'male',
         )));
 
-        $this->result = $response->json(true);
-        if ((int)$this->result['code'] === 0) {
-            return $this->result;
-        } else {
-            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
-        }
+        $this->handleResult($response);
+        return $this->result;
     }
 
     /**
@@ -185,13 +164,9 @@ class OAuth2 extends Base
             'app_secret' => $this->appSecret
         )));
 
-        $this->result = $response->json(true);
-        if ((int)$this->result['code'] === 0) {
-            $this->openid = $this->result['data']['id'];
-            return $this->result;
-        } else {
-            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
-        }
+        $this->handleResult($response);
+        $this->openid = $this->result['data']['id'];
+        return $this->result;
     }
 
     /**
@@ -227,6 +202,21 @@ class OAuth2 extends Base
     }
 
     /**
+     * @param \Yurun\Util\YurunHttp\Http\Response $response
+     * @return mixed
+     * @throws ApiException
+     */
+    public function handleResult($response)
+    {
+        $this->result = $response->json(true);
+        if ((int)$this->result['code'] === 0) {
+            return $this->result['data'];
+        } else {
+            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
+        }
+    }
+
+    /**
      * 获取用户其他系统同一设备登录状态
      * @param $deviceUniqueCode
      * @param $ip
@@ -235,18 +225,15 @@ class OAuth2 extends Base
      */
     public function getUserSsoStatusByDevice($deviceUniqueCode, $ip)
     {
-        $response = $this->http->get($this->getUrl('oauth/getUserSsoStatusByDevice', array(
+        $requestData = array(
             'app_key' => $this->appid,
             'app_secret' => $this->appSecret,
             'ip' => $ip,
-            'device_unique_code' => $deviceUniqueCode // 传入设备唯一值
-        )));
-        $this->result = $response->json(true);
-        if ((int)$this->result['code'] === 0) {
-            return $this->result['data'];
-        } else {
-            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
-        }
+            'device_unique_code' => $deviceUniqueCode,
+        );
+        $response = $this->http->post($this->getUrl('oauth/getUserSsoStatusByDevice'), $requestData);
+        $this->handleResult($response);
+        return $this->result['data'];
     }
 
     /**
@@ -265,15 +252,33 @@ class OAuth2 extends Base
             'ip' => $ip,
             'device_unique_code' => $deviceUniqueCode
         ));
-        $response = $this->http->get($this->getUrl('oauth/login', $requestData));
+        $response = $this->http->post($this->getUrl('oauth/login'), $requestData);
 
-        $this->result = $response->json(true);
+        $this->handleResult($response);
+        return $this->result['data'];
+    }
 
-        if ((int)$this->result['code'] === 0) {
-            return $this->result['data'];
-        } else {
-            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
-        }
+
+    /**
+     * 通过用户设备码和ip来登录生成token
+     * @param $deviceUniqueCode
+     * @param string $ip 设备ip
+     * @return mixed
+     * @throws ApiException
+     */
+    public function generateTokenByDeviceCode($deviceUniqueCode, $ip)
+    {
+        $requestData = array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'ip' => $ip,
+            'device_unique_code' => $deviceUniqueCode,
+            'mode' => "deviceCode",
+        );
+        $response = $this->http->post($this->getUrl('oauth/login'), $requestData);
+
+        $this->handleResult($response);
+        return $this->result['data'];
     }
 
 
@@ -287,21 +292,15 @@ class OAuth2 extends Base
      */
     public function getUserInfoByAccessToken($accessToken, $deviceUniqueCode, $ip)
     {
-        $requestData = array(
-            'app_key' => $this->appid,
-            'app_secret' => $this->appSecret,
+        $this->http->headers(array(
+            "device_unique_code" => $deviceUniqueCode,
             'ip' => $ip,
-            'device_unique_code' => $deviceUniqueCode,
-        );
-        $response = $this->http->header("token", $accessToken)->get($this->getUrl('oauth/getInfo', $requestData));
+            'token' => $accessToken,
+        ));
+        $response = $this->http->post($this->getUrl('user/get_my_user_info'));
 
-        $this->result = $response->json(true);
-
-        if ((int)$this->result['code'] === 0) {
-            return $this->result['data'];
-        } else {
-            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
-        }
+        $this->handleResult($response);
+        return $this->result['data'];
     }
 
     /**
@@ -312,23 +311,21 @@ class OAuth2 extends Base
      * @return array|bool
      * @throws ApiException
      */
-    public function refreshTokenWithDeviceCode($refreshToken, $deviceUniqueCode, $ip)
+    public function refreshTokenWithDeviceCode($refreshToken, $deviceUniqueCode = "", $ip = "")
     {
-        $response = $this->http->get($this->getUrl('oauth/refreshToken', array(
-            'grant_type' => 'refresh_token',
+        $headers = array(
+            'device_unique_code' => $deviceUniqueCode,
+            'ip' => $ip,
+        );
+        $requestData = array(
             'app_key' => $this->appid,
             'app_secret' => $this->appSecret,
             'refresh_token' => $refreshToken,
-            'device_unique_code' => $deviceUniqueCode,
-            'ip' => $ip,
-        )));
+        );
+        $response = $this->http->headers($headers)->post($this->getUrl('oauth/refresh_token'), $requestData);
 
-        $this->result = $response->json(true);
-        if ((int)$this->result['code'] === 0) {
-            return $this->result['data'];
-        } else {
-            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
-        }
+        $this->handleResult($response);
+        return $this->result['data'];
     }
 
     /**
@@ -337,26 +334,23 @@ class OAuth2 extends Base
      * @param $deviceUniqueCode
      * @param $ip
      * @return bool
+     * @throws ApiException
      */
     public function validateAccessTokenWithDeviceCode($accessToken, $deviceUniqueCode, $ip)
     {
         $requestData = array(
-            'app_key' => $this->appid,
-            'app_secret' => $this->appSecret,
             'ip' => $ip,
             'access_token' => $accessToken,
             'device_unique_code' => $deviceUniqueCode, // 传入设备唯一值
         );
 
-        $response = $this->http->get($this->getUrl('oauth/checkToken', $requestData));
+        $response = $this->http->post($this->getUrl('oauth/check_token'), $requestData);
 
-        $this->result = $response->json(true);
-
-        if ((int)$this->result['code'] === 0) {
-            return $this->result['data'];
-        } else {
-            return false;
+        $this->handleResult($response);
+        if (empty($this->result['data'])) {
+            throw  new ApiException("token invaid");
         }
+        return $this->result['data'];
     }
 
     /**
@@ -369,23 +363,16 @@ class OAuth2 extends Base
      */
     public function cancelAccessToken($accessToken, $deviceUniqueCode, $ip)
     {
-        $requestData = array(
-            'app_key' => $this->appid,
-            'app_secret' => $this->appSecret,
+        $headers = array(
             'ip' => $ip,
-            'access_token' => $accessToken,
-            'device_unique_code' => $deviceUniqueCode, // 传入设备唯一值
+            'token' => $accessToken,
+            'device_unique_code' => $deviceUniqueCode,
         );
 
-        $response = $this->http->header('token', $accessToken)->get($this->getUrl('oauth/logout', $requestData));
+        $response = $this->http->headers($headers)->post($this->getUrl('oauth/logout'));
 
-        $this->result = $response->json(true);
-
-        if ((int)$this->result['code'] === 0) {
-            return $this->result['data'];
-        } else {
-            throw new ApiException($this->result['msg'], $this->result['code']);
-        }
+        $this->handleResult($response);
+        return $this->result['data'];
     }
 
     /**
@@ -399,7 +386,7 @@ class OAuth2 extends Base
      * @return mixed
      * @throws ApiException
      */
-    public function remoteProcedureCallByAccessToken($method, $route, $data, $token, $deviceUniqueCode = "", $ip = "")
+    public function remoteProcedureCallByAccessToken($method, $route, $data, $token = "", $deviceUniqueCode = "", $ip = "")
     {
         $requestData = array(
             'app_key' => $this->appid,
@@ -408,25 +395,31 @@ class OAuth2 extends Base
             'device_unique_code' => $deviceUniqueCode, // 传入设备唯一值
         );
         $requestData = array_merge($data, $requestData);
+
+        $headers = array(
+            'device_unique_code' => $deviceUniqueCode,
+            'ip' => $ip,
+        );
         if (!empty($token)) {
-            $this->http->header('token', $token);
+            $headers['token'] = $token;
         }
+        $this->http->headers($headers);
 
         switch (strtolower($method)) {
             case "post":
-                $response = $this->http->post($this->getUrl($route, $requestData));
+                $response = $this->http->post($this->getUrl($route), $requestData);
                 break;
             case "get":
                 $response = $this->http->get($this->getUrl($route, $requestData));
                 break;
             case "put":
-                $response = $this->http->put($this->getUrl($route, $requestData));
+                $response = $this->http->put($this->getUrl($route), $requestData);
                 break;
             case "head":
-                $response = $this->http->head($this->getUrl($route, $requestData));
+                $response = $this->http->head($this->getUrl($route), $requestData);
                 break;
             case "patch":
-                $response = $this->http->patch($this->getUrl($route, $requestData));
+                $response = $this->http->patch($this->getUrl($route), $requestData);
                 break;
             case "delete":
                 $response = $this->http->delete($this->getUrl($route, $requestData));
@@ -434,11 +427,7 @@ class OAuth2 extends Base
             default:
                 $response = $this->http->get($this->getUrl($route, $requestData));
         }
-        $this->result = $response->json(true);
-        if ((int)$this->result['code'] === 0) {
-            return $this->result['data'];
-        } else {
-            throw new ApiException($this->result['msg'], $this->result['code']);
-        }
+        $this->handleResult($response);
+        return $this->result['data'];
     }
 }
