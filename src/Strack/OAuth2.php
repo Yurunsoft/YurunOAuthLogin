@@ -293,7 +293,7 @@ class OAuth2 extends Base
     public function getUserInfoByAccessToken($accessToken, $deviceUniqueCode, $ip)
     {
         $this->http->headers(array(
-            "device_unique_code" => $deviceUniqueCode,
+            "Device-Unique-Code" => $deviceUniqueCode,
             'ip' => $ip,
             'token' => $accessToken,
         ));
@@ -314,7 +314,7 @@ class OAuth2 extends Base
     public function refreshTokenWithDeviceCode($refreshToken, $deviceUniqueCode = "", $ip = "")
     {
         $headers = array(
-            'device_unique_code' => $deviceUniqueCode,
+            'Device-Unique-Code' => $deviceUniqueCode,
             'ip' => $ip,
         );
         $requestData = array(
@@ -366,7 +366,7 @@ class OAuth2 extends Base
         $headers = array(
             'ip' => $ip,
             'token' => $accessToken,
-            'device_unique_code' => $deviceUniqueCode,
+            'Device-Unique-Code' => $deviceUniqueCode,
         );
 
         $response = $this->http->headers($headers)->post($this->getUrl('oauth/logout'));
@@ -397,7 +397,7 @@ class OAuth2 extends Base
         $requestData = array_merge($data, $requestData);
 
         $headers = array(
-            'device_unique_code' => $deviceUniqueCode,
+            'Device-Unique-Code' => $deviceUniqueCode,
             'ip' => $ip,
         );
         if (!empty($token)) {
