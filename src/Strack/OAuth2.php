@@ -212,7 +212,7 @@ class OAuth2 extends Base
         if ((int)$this->result['code'] === 0) {
             return $this->result['data'];
         } else {
-            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', $response->httpCode());
+            throw new ApiException(isset($this->result['msg']) ? $this->result['msg'] : '', isset($this->result['code']) ? $this->result['code'] : $response->getStatusCode());
         }
     }
 
