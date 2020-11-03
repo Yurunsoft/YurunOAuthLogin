@@ -283,6 +283,31 @@ class OAuth2 extends Base
 
 
     /**
+     * 通过用户app扫描二维码ID和设备码和ip来登录生成token
+     * @param $deviceUniqueCode
+     * @param string $ip 设备ip
+     * @param $qrCodeId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function generateTokenByQRCodeId($deviceUniqueCode, $ip, $qrCodeId)
+    {
+        $requestData = array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'ip' => $ip,
+            'device_unique_code' => $deviceUniqueCode,
+            'qr_code_id' => $qrCodeId,
+            'mode' => "QRCodeId",
+        );
+        $response = $this->http->post($this->getUrl('oauth/login'), $requestData);
+
+        $this->handleResult($response);
+        return $this->result['data'];
+    }
+
+
+    /**
      * 通过access_token 拉取用户信息
      * @param $accessToken
      * @param $deviceUniqueCode
