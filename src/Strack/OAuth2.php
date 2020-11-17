@@ -132,22 +132,81 @@ class OAuth2 extends Base
     }
 
     /**
+     * 随机密码
+     * @throws \Exception
+     */
+    protected function randomPasswordCode()
+    {
+        $code = sprintf('%06d', random_int(1, 999999));
+        return 'Teamones2020~_' . $code;
+    }
+
+    /**
      * 同步注册用户
      * @param $data
      * @return array
      * @throws ApiException
      */
-    public function syncRegister($data)
+    public function syncRegister($data, $verifyCode = '')
     {
-        $response = $this->http->get($this->getUrl('oauth/syncRegister', array(
-            'name' => $data['name'],
-            'phone' => $data['phone'],
-            'password' => !empty($data['password']) ? $data['password'] : '',
-            'sex' => !empty($data['sex']) ? $data['sex'] : 'male',
+        $response = $this->http->post($this->getUrl('oauth/sync_register', array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'verify_code' => $verifyCode,
+            'data' => [
+                'name' => !empty($data['name']) ? $data['name'] : $data['phone'],
+                'phone' => $data['phone'],
+                'password' => !empty($data['password']) ? $data['password'] : $this->randomPasswordCode(),
+                'sex' => !empty($data['sex']) ? $data['sex'] : 'male',
+            ]
         )));
 
         $this->handleResult($response);
-        return $this->result;
+        return $this->result['data'];
+    }
+
+    /**
+     * 远端验证用户账户密码
+     * @param $phone
+     * @param $password
+     * @return mixed
+     * @throws ApiException
+     */
+    public function remoteVerifyUserLogin($phone, $password)
+    {
+        $response = $this->http->post($this->getUrl('oauth/remote_verify_login', array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'data' => [
+                'phone' => $phone,
+                'password' => $password,
+            ]
+        )));
+
+        $this->handleResult($response);
+        return $this->result['data'];
+    }
+
+    /**
+     * 发送验证短信
+     * @param $phone
+     * @param $type
+     * @param $verifyCode
+     * @return mixed
+     * @throws ApiException
+     */
+    public function sendSMS($phone, $type, $verifyCode)
+    {
+        $response = $this->http->post($this->getUrl('oauth/send_sms', array(
+            'app_key' => $this->appid,
+            'app_secret' => $this->appSecret,
+            'phone' => $phone,
+            'type' => $type,
+            'verify_code' => $verifyCode
+        )));
+
+        $this->handleResult($response);
+        return $this->result['data'];
     }
 
     /**
