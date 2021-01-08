@@ -514,4 +514,49 @@ class OAuth2 extends Base
         $this->handleResult($response);
         return $this->result['data'];
     }
+
+    /**
+     * 内部无权限接口调用
+     * @param $method
+     * @param $route
+     * @param $requestData
+     * @param string $xUserInfo
+     * @param string $ip
+     * @return mixed
+     * @throws ApiException
+     */
+    public function remoteProcedureCallByXuserinfo($method, $route, $requestData, $xUserInfo = "", $ip = "")
+    {
+        $headers = array(
+            'x-userinfo' => $xUserInfo,
+            'ip' => $ip,
+        );
+
+        $this->http->headers($headers);
+
+        switch (strtolower($method)) {
+            case "post":
+                $response = $this->http->post($this->getUrl($route), $requestData);
+                break;
+            case "get":
+                $response = $this->http->get($this->getUrl($route, $requestData));
+                break;
+            case "put":
+                $response = $this->http->put($this->getUrl($route), $requestData);
+                break;
+            case "head":
+                $response = $this->http->head($this->getUrl($route), $requestData);
+                break;
+            case "patch":
+                $response = $this->http->patch($this->getUrl($route), $requestData);
+                break;
+            case "delete":
+                $response = $this->http->delete($this->getUrl($route, $requestData));
+                break;
+            default:
+                $response = $this->http->get($this->getUrl($route, $requestData));
+        }
+        $this->handleResult($response);
+        return $this->result['data'];
+    }
 }
