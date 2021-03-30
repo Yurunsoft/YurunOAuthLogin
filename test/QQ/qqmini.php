@@ -1,6 +1,6 @@
 <?php
 /**
- * QQ 小程序解密数据演示
+ * QQ 小程序解密数据演示.
  */
 require __DIR__ . '/common.php';
 $qqOAuth = new \Yurun\OAuthLogin\QQ\OAuth2($GLOBALS['oauth_qq']['appid'], $GLOBALS['oauth_qq']['appkey']);

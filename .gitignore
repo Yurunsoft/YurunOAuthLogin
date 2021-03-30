@@ -1,4 +1,4 @@
 /vendor
 /composer.lock
-/test/Github/*.log
 /test/Swoole/state.txt
+*.log

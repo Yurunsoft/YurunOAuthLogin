@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/common.php';
 $csdnOAuth = new \Yurun\OAuthLogin\CSDN\OAuth2($GLOBALS['oauth_csdn']['appid'], $GLOBALS['oauth_csdn']['appkey'], $GLOBALS['oauth_csdn']['callbackUrl']);
 
@@ -12,8 +13,8 @@ $csdnOAuth->allowSignup = false;
 */
 // 所有为null的可不传，这里为了演示和加注释就写了
 $url = $csdnOAuth->getAuthUrl(
-	null,	// 回调地址，登录成功后返回该地址
-	null,	// state 为空自动生成
-	null	// scope 只要登录默认为空即可
+    null,	// 回调地址，登录成功后返回该地址
+    null,	// state 为空自动生成
+    null	// scope 只要登录默认为空即可
 );
 header('location:' . $url);

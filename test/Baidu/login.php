@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/common.php';
 $baiduOAuth = new \Yurun\OAuthLogin\Baidu\OAuth2($GLOBALS['oauth_baidu']['appid'], $GLOBALS['oauth_baidu']['appkey'], $GLOBALS['oauth_baidu']['callbackUrl']);
 
@@ -12,9 +13,9 @@ $baiduOAuth->allowSignup = false;
 */
 // 所有为null的可不传，这里为了演示和加注释就写了
 $url = $baiduOAuth->getAuthUrl(
-	null,	// 回调地址，登录成功后返回该地址
-	null,	// state 为空自动生成
-	null	// scope 只要登录默认为空即可
+    null,	// 回调地址，登录成功后返回该地址
+    null,	// state 为空自动生成
+    null	// scope 只要登录默认为空即可
 );
 $_SESSION['YURUN_BAIDU_STATE'] = $baiduOAuth->state;
 header('location:' . $url);

@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/common.php';
 $giteeOAuth = new \Yurun\OAuthLogin\Gitee\OAuth2($GLOBALS['oauth_gitee']['appid'], $GLOBALS['oauth_gitee']['appkey'], $GLOBALS['oauth_gitee']['callbackUrl']);
 
@@ -12,9 +13,9 @@ $giteeOAuth->allowSignup = false;
 */
 // 所有为null的可不传，这里为了演示和加注释就写了
 $url = $giteeOAuth->getAuthUrl(
-	null,	// 回调地址，登录成功后返回该地址
-	null,	// state 为空自动生成
-	null	// scope 只要登录默认为空即可
+    null,	// 回调地址，登录成功后返回该地址
+    null,	// state 为空自动生成
+    null	// scope 只要登录默认为空即可
 );
 $_SESSION['YURUN_GITEE_STATE'] = $giteeOAuth->state;
 header('location:' . $url);

@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/common.php';
 $codingOAuth = new \Yurun\OAuthLogin\Coding\OAuth2($GLOBALS['oauth_coding']['appid'], $GLOBALS['oauth_coding']['appkey'], $GLOBALS['oauth_coding']['callbackUrl']);
 
@@ -12,8 +13,8 @@ $codingOAuth->allowSignup = false;
 */
 // 所有为null的可不传，这里为了演示和加注释就写了
 $url = $codingOAuth->getAuthUrl(
-	null,	// 回调地址，登录成功后返回该地址
-	null,	// state 为空自动生成
-	'user'	// scope，多个用逗号分隔
+    null,	// 回调地址，登录成功后返回该地址
+    null,	// state 为空自动生成
+    'user'	// scope，多个用逗号分隔
 );
 header('location:' . $url);
