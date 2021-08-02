@@ -17,7 +17,7 @@ class OAuth2 extends Base
     const API_DOMAIN = 'https://openapi.alipay.com/gateway.do';
 
     /**
-     * 非必须参数。以空格分隔的权限列表，若不传递此参数，代表请求的数据访问操作权限与上次获取Access Token时一致。通过Refresh Token刷新Access Token时所要求的scope权限范围必须小于等于上次获取Access Token时授予的权限范围。关于权限的具体信息请参考http://developer.baidu.com/wiki/index.php?title=docs/oauth/baiduoauth/list.
+     * 非必须参数。接口权限值，目前只支持 auth_userinfo 和 auth_base 两个值。以空格分隔的权限列表，若不传递此参数，代表请求的数据访问操作权限与上次获取Access Token时一致。通过Refresh Token刷新Access Token时所要求的scope权限范围必须小于等于上次获取Access Token时授予的权限范围。
      *
      * @var string
      */
@@ -56,7 +56,7 @@ class OAuth2 extends Base
      *
      * @param string $callbackUrl 登录回调地址
      * @param string $state       非必须参数，用于保持请求和回调的状态，授权服务器在回调时（重定向用户浏览器到“redirect_uri”时），会在Query Parameter中原样回传该参数。OAuth2.0标准协议建议，利用state参数来防止CSRF攻击。
-     * @param array  $scope       非必须参数，以空格分隔的权限列表，若不传递此参数，代表请求用户的默认权限。关于权限的具体信息请参考“权限列表”。
+     * @param array  $scope       非必须参数，以空格分隔的权限列表，若不传递此参数，代表请求用户的默认权限。
      *
      * @return string
      */
@@ -64,7 +64,7 @@ class OAuth2 extends Base
     {
         $option = [
             'app_id'			      => $this->appid,
-            'scope'				      => $scope ? $scope : 'auth_user',
+            'scope'				      => $scope ? $scope : 'auth_userinfo',
             'redirect_uri'		 => null === $callbackUrl ? $this->callbackUrl : $callbackUrl,
             'state'				      => $this->getState($state),
         ];
