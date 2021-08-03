@@ -31,7 +31,7 @@ class OAuth2 extends Base
     public $signType = 'RSA2';
 
     /**
-     * 详见应用授权概述:https://docs.open.alipay.com/common/105193.
+     * 详见应用授权概述:https://opendocs.alipay.com/isv/10467/xldcyq.
      *
      * @var string
      */
@@ -132,7 +132,7 @@ class OAuth2 extends Base
     {
         $params = [
             'app_id'		    => $this->appid,
-            'method'		    => 'alipay.user.info.share',
+            'method'		    => 'alipay.user.userinfo.share',
             'charset'		   => 'utf-8',
             'sign_type'		 => $this->signType,
             'timestamp'		 => date('Y-m-d H:i:s'),
@@ -147,11 +147,11 @@ class OAuth2 extends Base
         $response = $this->http->get(static::API_DOMAIN, $params);
         $this->result = $response->json(true);
 
-        if (!isset($this->result['alipay_user_info_share_response']) && isset($this->result['error_response']))
+        if (!isset($this->result['alipay_user_userinfo_share_response']) && isset($this->result['error_response']))
         {
             throw new ApiException(sprintf('%s %s', $this->result['error_response']['msg'], $this->result['error_response']['sub_msg']), $this->result['error_response']['code']);
         }
-        $this->result = $responseData = $this->result['alipay_user_info_share_response'];
+        $this->result = $responseData = $this->result['alipay_user_userinfo_share_response'];
         if (isset($responseData['code']) && 10000 != $responseData['code'])
         {
             throw new ApiException(sprintf('%s %s', $responseData['msg'], $responseData['sub_msg']), $responseData['code']);
