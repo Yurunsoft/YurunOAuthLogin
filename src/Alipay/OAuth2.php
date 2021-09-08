@@ -17,7 +17,7 @@ class OAuth2 extends Base
     const API_DOMAIN = 'https://openapi.alipay.com/gateway.do';
 
     /**
-     * 非必须参数。接口权限值，目前只支持 auth_userinfo 和 auth_base 两个值。以空格分隔的权限列表，若不传递此参数，代表请求的数据访问操作权限与上次获取Access Token时一致。通过Refresh Token刷新Access Token时所要求的scope权限范围必须小于等于上次获取Access Token时授予的权限范围。
+     * 非必须参数。接口权限值，目前只支持 auth_user 和 auth_base 两个值。以空格分隔的权限列表，若不传递此参数，代表请求的数据访问操作权限与上次获取Access Token时一致。通过Refresh Token刷新Access Token时所要求的scope权限范围必须小于等于上次获取Access Token时授予的权限范围。
      *
      * @var string
      */
@@ -64,7 +64,7 @@ class OAuth2 extends Base
     {
         $option = [
             'app_id'			      => $this->appid,
-            'scope'				      => $scope ? $scope : 'auth_userinfo',
+            'scope'				      => $scope ? $scope : 'auth_user',
             'redirect_uri'		 => null === $callbackUrl ? $this->callbackUrl : $callbackUrl,
             'state'				      => $this->getState($state),
         ];
@@ -125,6 +125,7 @@ class OAuth2 extends Base
      * 获取用户资料.
      *
      * @param string $accessToken
+     * @link https://opendocs.alipay.com/apis/api_2/alipay.user.info.share
      *
      * @return array
      */
@@ -132,7 +133,7 @@ class OAuth2 extends Base
     {
         $params = [
             'app_id'		    => $this->appid,
-            'method'		    => 'alipay.user.userinfo.share',
+            'method'		    => 'alipay.user.info.share',
             'charset'		   => 'utf-8',
             'sign_type'		 => $this->signType,
             'timestamp'		 => date('Y-m-d H:i:s'),
@@ -147,11 +148,11 @@ class OAuth2 extends Base
         $response = $this->http->get(static::API_DOMAIN, $params);
         $this->result = $response->json(true);
 
-        if (!isset($this->result['alipay_user_userinfo_share_response']) && isset($this->result['error_response']))
+        if (!isset($this->result['alipay_user_info_share_response']) && isset($this->result['error_response']))
         {
             throw new ApiException(sprintf('%s %s', $this->result['error_response']['msg'], $this->result['error_response']['sub_msg']), $this->result['error_response']['code']);
         }
-        $this->result = $responseData = $this->result['alipay_user_userinfo_share_response'];
+        $this->result = $responseData = $this->result['alipay_user_info_share_response'];
         if (isset($responseData['code']) && 10000 != $responseData['code'])
         {
             throw new ApiException(sprintf('%s %s', $responseData['msg'], $responseData['sub_msg']), $responseData['code']);
