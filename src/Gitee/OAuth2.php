@@ -145,8 +145,20 @@ class OAuth2 extends Base
      */
     public function refreshToken($refreshToken)
     {
-        // 不支持
-        return false;
+        $response = $this->http->post($this->getUrl('oauth/token', [
+            'grant_type'	 => 'refresh_token',
+            'refresh_token'	 => $refreshToken,
+        ]));
+        $this->result = $response->json(true);
+
+        if (!isset($this->result['error']))
+        {
+            return $this->accessToken = $this->result['access_token'];
+        }
+        else
+        {
+            throw new ApiException(isset($this->result['error_description']) ? $this->result['error_description'] : '', $response->httpCode());
+        }
     }
 
     /**
