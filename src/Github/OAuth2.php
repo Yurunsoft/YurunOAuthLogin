@@ -115,9 +115,11 @@ class OAuth2 extends Base
      */
     public function getUserInfo($accessToken = null)
     {
-        $this->result = $this->http->ua('YurunOAuthLogin')->get($this->getUrl('user', [
-            'access_token'			 => null === $accessToken ? $this->accessToken : $accessToken,
-        ]))->json(true);
+        $token = null === $accessToken ? $this->accessToken : $accessToken;
+        $this->result = $this->http->ua('YurunOAuthLogin')
+            ->header('Authorization', "token {$token}")
+            ->get($this->getUrl('user'))
+            ->json(true);
         if (isset($this->result['message']))
         {
             throw new ApiException($this->result['message'], 0);
