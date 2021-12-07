@@ -86,28 +86,20 @@ class OAuth2 extends Base
      */
     protected function __getAccessToken($storeState, $code = null, $state = null)
     {
-        $content = $this->http->get($this->getUrl('oauth2.0/token', [
-            'grant_type'	    => 'authorization_code',
-            'client_id'		    => $this->appid,
-            'client_secret'	 => $this->appSecret,
-            'code'			        => isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
-            'state'			       => isset($state) ? $state : (isset($_GET['state']) ? $_GET['state'] : ''),
-            'redirect_uri'	  => $this->getRedirectUri(),
-        ]))->body();
-        $jsonData = json_decode($content, true);
-        if ($jsonData)
-        {
-            $this->result = $jsonData;
-            throw new ApiException($jsonData['error_description'], $jsonData['error']);
-        }
-        parse_str($content, $result);
-        $this->result = $result;
-        if (isset($this->result['code']) && 0 != $this->result['code'])
-        {
-            throw new ApiException($this->result['msg'], $this->result['code']);
-        }
-        else
-        {
+        $this->result = $this->http->get(
+            $this->getUrl('oauth2.0/token', [
+                'grant_type' => 'authorization_code',
+                'client_id' => $this->appid,
+                'client_secret' => $this->appSecret,
+                'code' => isset($code) ? $code : (isset($_GET['code']) ? $_GET['code'] : ''),
+                'state' => isset($state) ? $state : (isset($_GET['state']) ? $_GET['state'] : ''),
+                'redirect_uri' => $this->getRedirectUri(),
+                'fmt' => 'json',
+            ])
+        )->json(true);
+        if (isset($this->result['error'])) {
+            throw new ApiException($this->result['error_description'], $this->result['error']);
+        } else {
             return $this->accessToken = $this->result['access_token'];
         }
     }
