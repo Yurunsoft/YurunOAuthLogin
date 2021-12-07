@@ -239,6 +239,9 @@ class OAuth2 extends Base
                 case OpenidMode::UNION_ID:
                     $this->openid = $this->result['unionid'];
                     break;
+                case OpenidMode::UNION_ID_FIRST:
+                    $this->openid = empty($this->result['unionid']) ? $this->result['openid'] : $this->result['unionid'];
+                    break;
             }
         }
 
