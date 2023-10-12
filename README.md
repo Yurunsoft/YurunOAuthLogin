@@ -2,7 +2,7 @@
 
 [![Latest Version](https://img.shields.io/packagist/v/yurunsoft/yurun-oauth-login.svg)](https://packagist.org/packages/yurunsoft/yurun-oauth-login)
 [![IMI Doc](https://img.shields.io/badge/docs-passing-green.svg)](http://doc.yurunsoft.com/YurunOAuthLogin)
-[![IMI License](https://img.shields.io/GitHub/license/Yurunsoft/YurunOAuthLogin.svg)](https://GitHub.com/Yurunsoft/YurunOAuthLogin/blob/master/LICENSE)
+[![IMI License](https://img.shields.io/github/license/Yurunsoft/YurunOAuthLogin.svg)](https://github.com/Yurunsoft/YurunOAuthLogin/blob/master/LICENSE)
 
 ## 介绍
 
