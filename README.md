@@ -6,7 +6,7 @@
 
 ## 介绍
 
-YurunOAuthLogin是一个 PHP 第三方登录授权 SDK，集成了 QQ、微信、微博、GitHub 等常用接口。
+YurunOAuthLogin 是一个 PHP 第三方登录授权 SDK，集成了 QQ、微信、微博、GitHub 等常用接口。
 
 无框架依赖，支持所有框架，支持 Swoole 协程环境。
 
