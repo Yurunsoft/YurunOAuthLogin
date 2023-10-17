@@ -35,6 +35,7 @@ API 文档：[https://apidoc.gitee.com/yurunsoft/YurunOAuthLogin](https://apidoc
 - GitLab
 - 飞书
 - 钉钉
+- 企业微信
 
 > 后续将不断添加新的平台支持，也欢迎你来提交PR，一起完善！
 
