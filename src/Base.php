@@ -275,6 +275,6 @@ abstract class Base
      */
     public function getRedirectUri()
     {
-        return null === $this->loginAgentUrl ? $this->callbackUrl : ($this->loginAgentUrl . '?' . http_build_query(['redirect_uri' => $this->callbackUrl]));
+        return null === $this->loginAgentUrl ? $this->callbackUrl : ($this->loginAgentUrl . '?' . $this->http_build_query(['redirect_uri' => $this->callbackUrl]));
     }
 }
