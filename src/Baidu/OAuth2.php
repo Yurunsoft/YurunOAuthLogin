@@ -136,7 +136,7 @@ class OAuth2 extends Base
         $this->result = $response->json(true);
         if (!isset($this->result['error_description']))
         {
-            $this->openid = $this->result['uid'];
+            $this->openid = $this->result['openid'];
 
             return $this->result;
         }
